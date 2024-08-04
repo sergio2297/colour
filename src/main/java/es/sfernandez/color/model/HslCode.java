@@ -11,9 +11,9 @@ public record HslCode(float hue, float saturation, float lightness)
 
     //---- Constructor ----
     public HslCode {
-        assertIsValid(hue, "Red");
-        assertIsValid(saturation, "Green");
-        assertIsValid(lightness, "Blue");
+        assertIsValid(hue, "Hue");
+        assertIsValid(saturation, "Saturation");
+        assertIsValid(lightness, "Lightness");
     }
 
     public HslCode(int hue, int saturation, int lightness) {

@@ -93,37 +93,37 @@ class HslCodeTest {
 
     @Test
     void hueValue_createdFromNormalizedValue_isCorrectlyNormalizedToDegreesTest() {
-        HslCode rgb = new HslCode(0.75f, 0, 0);
+        HslCode hsl = new HslCode(0.75f, 0, 0);
 
-        assertThat(rgb.hueDegrees()).isEqualTo(270);
+        assertThat(hsl.hueDegrees()).isEqualTo(270);
     }
 
     @Test
     void saturationValue_createdFromNormalizedValue_isCorrectlyNormalizedToPercentageTest() {
-        HslCode rgb = new HslCode(0, 0.5f, 0);
+        HslCode hsl = new HslCode(0, 0.5f, 0);
 
-        assertThat(rgb.saturationPercentage()).isEqualTo(50);
+        assertThat(hsl.saturationPercentage()).isEqualTo(50);
     }
 
     @Test
     void lightnessValue_createdFromNormalizedValue_isCorrectlyNormalizedToPercentageTest() {
-        HslCode rgb = new HslCode(0, 0, 0.75f);
+        HslCode hsl = new HslCode(0, 0, 0.75f);
 
-        assertThat(rgb.lightnessPercentage()).isEqualTo(75);
+        assertThat(hsl.lightnessPercentage()).isEqualTo(75);
     }
 
     @Test
     void cssCode_isCorrectlyGenerated_fromNormalizedCodeTest() {
-        HslCode rgb = new HslCode(0.25f, 0.5f, 0.75f);
+        HslCode hsl = new HslCode(0.25f, 0.5f, 0.75f);
 
-        assertThat(rgb.toCssCode()).isEqualTo("hsl(90, 50%, 75%)");
+        assertThat(hsl.toCssCode()).isEqualTo("hsl(90, 50%, 75%)");
     }
 
     @Test
     void cssCode_isCorrectlyGenerated_fromNormalized255CodeTest() {
-        HslCode rgb = new HslCode(230, 15, 88);
+        HslCode hsl = new HslCode(230, 15, 88);
 
-        assertThat(rgb.toCssCode()).isEqualTo("hsl(230, 15%, 88%)");
+        assertThat(hsl.toCssCode()).isEqualTo("hsl(230, 15%, 88%)");
     }
 
     @Test
@@ -140,11 +140,11 @@ class HslCodeTest {
     @ParameterizedTest
     @ValueSource(strings = {"hsl(63, 27%, 88%)", "hsl(63   , 27%, 88%    )", "hsl(63,27%,88%)"})
     void createFromCssCode_worksTest(String cssCode) {
-        HslCode rgb = new HslCode(cssCode);
+        HslCode hsl = new HslCode(cssCode);
 
-        assertThat(rgb.hueDegrees()).isEqualTo(63);
-        assertThat(rgb.saturationPercentage()).isEqualTo(27);
-        assertThat(rgb.lightnessPercentage()).isEqualTo(88);
+        assertThat(hsl.hueDegrees()).isEqualTo(63);
+        assertThat(hsl.saturationPercentage()).isEqualTo(27);
+        assertThat(hsl.lightnessPercentage()).isEqualTo(88);
     }
 
 }
