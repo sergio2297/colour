@@ -1,4 +1,4 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

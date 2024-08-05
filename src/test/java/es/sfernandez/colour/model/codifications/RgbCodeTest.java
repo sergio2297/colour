@@ -1,4 +1,4 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
 
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;

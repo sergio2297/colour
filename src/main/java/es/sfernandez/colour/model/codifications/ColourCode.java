@@ -1,4 +1,6 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
+
+import es.sfernandez.colour.model.Colour;
 
 /**
  * <p>A {@link ColourCode} is used to represent a Colour codification.</p>

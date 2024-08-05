@@ -1,4 +1,4 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,4 +1,4 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
 
 public record HsbaCode(HsbCode hsb, float alpha)
         implements ColourCode {

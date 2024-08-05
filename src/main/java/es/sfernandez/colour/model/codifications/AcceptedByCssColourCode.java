@@ -1,4 +1,4 @@
-package es.sfernandez.color.model;
+package es.sfernandez.colour.model.codifications;
 
 /**
  * <p>Indicates that a {@link ColourCode} is accepted by CSS properties. For example, for background or font color.</p>
