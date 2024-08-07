@@ -101,4 +101,8 @@ public record CmykCode(float cyan, float magenta, float yellow, float black)
         return (int) (value * 100);
     }
 
+    @Override
+    public String toString() {
+        return toCode();
+    }
 }
