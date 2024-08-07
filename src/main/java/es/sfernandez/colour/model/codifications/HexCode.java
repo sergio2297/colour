@@ -1,5 +1,6 @@
 package es.sfernandez.colour.model.codifications;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,4 +46,15 @@ public final class HexCode
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HexCode hexCode)) return false;
+        return Objects.equals(value, hexCode.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 }

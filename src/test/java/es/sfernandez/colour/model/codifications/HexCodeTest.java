@@ -68,4 +68,12 @@ class HexCodeTest {
         assertThat(hexCode.value()).isEqualTo("#B1C2D0FE");
     }
 
+    @Test
+    void hexCodes_areEqual_iffTheyRepresentTheSameColourTest() {
+        HexCode code1 = new HexCode("aBcF05");
+        HexCode code2 = new HexCode("#ABCF05");
+
+        assertThat(code1).isEqualTo(code2);
+    }
+
 }
