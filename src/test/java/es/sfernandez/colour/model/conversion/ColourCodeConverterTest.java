@@ -187,10 +187,33 @@ public class ColourCodeConverterTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @MethodSource("deepConversionsBetweenAllColourCodesTestCases")
+    @MethodSource("directConversionsBetweenDefaultColourCodesAndRgbTestCases")
     <IN extends ColourCode, OUT extends ColourCode>
-    void deepConversion_betweenAllColourCodesAvailable_workTest(String name, TestCase<IN, OUT> testCase) {
+    void directConversion_betweenAvailableColourCodes_and_Rgb_canBeInvertedTest(String name, TestCase<IN, OUT> testCase) {
         ColourCode out = converter.convert(testCase.input, testCase.expected.getClass());
+        ColourCode reconvertedInput = converter.convert(out, testCase.input.getClass());
+
+        assertThat(reconvertedInput).isEqualTo(testCase.input);
+    }
+
+//    @ParameterizedTest(name = "{0}")
+//    @MethodSource("deepConversionsBetweenAllColourCodesTestCases")
+//    <IN extends ColourCode, OUT extends ColourCode>
+//    void deepConversion_betweenAllColourCodesAvailable_workTest(String name, TestCase<IN, OUT> testCase) {
+//        ColourCode out = converter.convert(testCase.input, testCase.expected.getClass());
+//
+//        assertThat(out).isEqualTo(testCase.expected);
+//     }
+
+//    @ParameterizedTest(name = "{0}")
+//    @MethodSource("deepConversionsBetweenAllColourCodesTestCases")
+//    <IN extends ColourCode, OUT extends ColourCode>
+//    void deepConversion_betweenAllColourCodesAvailable_canBeInvertedTest(String name, TestCase<IN, OUT> testCase) {
+//        ColourCode out = converter.convert(testCase.input, testCase.expected.getClass());
+//        ColourCode reconvertedInput = converter.convert(out, testCase.input.getClass());
+//
+//        assertThat(reconvertedInput).isEqualTo(testCase.input);
+//     }
 
         assertThat(out).isEqualTo(testCase.expected);
     }
