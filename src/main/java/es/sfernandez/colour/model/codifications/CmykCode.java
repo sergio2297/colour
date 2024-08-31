@@ -1,5 +1,8 @@
 package es.sfernandez.colour.model.codifications;
 
+import es.sfernandez.colour.model.utils.NumUtils;
+
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +27,7 @@ public record CmykCode(float cyan, float magenta, float yellow, float black)
     }
 
     public CmykCode(int cyan, int magenta, int yellow, int black) {
-        this(normalize(cyan, "Cyan"), normalize(magenta, "Magenta"), normalize(yellow, "Yellow"), normalize(black, "Black"));
+        this(normalize(cyan), normalize(magenta), normalize(yellow), normalize(black));
     }
 
     public CmykCode(String code) {
@@ -65,40 +68,49 @@ public record CmykCode(float cyan, float magenta, float yellow, float black)
         return value < 0.0f || value > 1.0f;
     }
 
-    private static float normalize(int value, String propertyName) {
-        if(isNotBetween0And100(value))
-            throw new IllegalArgumentException(propertyName + " value is out of range [0, 100]. (value=" + value + ")");
-
-        return value / 100.0f;
-    }
-
-    private static boolean isNotBetween0And100(int value) {
-        return value < 0 || value > 100;
-    }
-
     //---- Methods ----
     public String toCode() {
         return String.format("C%d M%d Y%d K%d", cyanPercentage(), magentaPercentage(), yellowPercentage(), blackPercentage());
     }
 
     public int cyanPercentage() {
-        return normalizeToPercentage(cyan);
+        return denormalize(cyan);
     }
 
     public int magentaPercentage() {
-        return normalizeToPercentage(magenta);
+        return denormalize(magenta);
     }
 
     public int yellowPercentage() {
-        return normalizeToPercentage(yellow);
+        return denormalize(yellow);
     }
 
     public int blackPercentage() {
-        return normalizeToPercentage(black);
+        return denormalize(black);
     }
 
-    private int normalizeToPercentage(final float value) {
-        return (int) (value * 100);
+    private static float normalize(int value) {
+        return NumUtils.normalize(0, 100, value);
+    }
+
+    private int denormalize(final float value) {
+        return NumUtils.denormalize(0, 100, value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CmykCode cmykCode)) return false;
+
+        return cyanPercentage() == cmykCode.cyanPercentage()
+                && magentaPercentage() == cmykCode.magentaPercentage()
+                && yellowPercentage() == cmykCode.yellowPercentage()
+                && blackPercentage() == cmykCode.blackPercentage();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cyanPercentage(), magentaPercentage(), yellowPercentage(), blackPercentage());
     }
 
     @Override
