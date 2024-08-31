@@ -26,17 +26,17 @@ public final class HexCodeFixtures implements ColourCodeFixtures<HexCode> {
 
     @Override
     public HexCode red() {
-        return new HexCode("#FF0000");
+        return new HexCode("#F00");
     }
 
     @Override
     public HexCode green() {
-        return new HexCode("#00FF00");
+        return new HexCode("#0F0");
     }
 
     @Override
     public HexCode blue() {
-        return new HexCode("#0000FF");
+        return new HexCode("#00F");
     }
 
     @Override

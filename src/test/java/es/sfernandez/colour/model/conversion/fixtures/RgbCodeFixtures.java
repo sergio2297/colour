@@ -11,46 +11,46 @@ public final class RgbCodeFixtures implements ColourCodeFixtures<RgbCode> {
 
     @Override
     public RgbCode white() {
-        return new RgbCode(255, 255, 255);
+        return new RgbCode(1.0f, 1.0f, 1.0f);
     }
 
     @Override
     public RgbCode black() {
-        return new RgbCode(0, 0, 0);
+        return new RgbCode(0.0f, 0.0f, 0.0f);
     }
 
     @Override
     public RgbCode grey() {
-        return new RgbCode(128, 128, 128);
+        return new RgbCode(0.5f, 0.5f, 0.5f);
     }
 
     @Override
     public RgbCode red() {
-        return new RgbCode(255, 0, 0);
+        return new RgbCode(1.0f, 0.0f, 0.0f);
     }
 
     @Override
     public RgbCode green() {
-        return new RgbCode(0, 255, 0);
+        return new RgbCode(0.0f, 1.0f, 0.0f);
     }
 
     @Override
     public RgbCode blue() {
-        return new RgbCode(0, 0, 255);
+        return new RgbCode(0.0f, 0.0f, 1.0f);
     }
 
     @Override
     public RgbCode cyan() {
-        return new RgbCode(0, 255, 255);
+        return new RgbCode(0.0f, 1.0f, 1.0f);
     }
 
     @Override
     public RgbCode magenta() {
-        return new RgbCode(255, 0, 255);
+        return new RgbCode(1.0f, 0.0f, 1.0f);
     }
 
     @Override
     public RgbCode yellow() {
-        return new RgbCode(255, 255, 0);
+        return new RgbCode(1.0f, 1.0f, 0.0f);
     }
 }

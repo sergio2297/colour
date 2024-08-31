@@ -4,6 +4,8 @@ import es.sfernandez.colour.model.codifications.HexCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
 import es.sfernandez.colour.model.conversion.ColourCodeConversion;
 
+import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
+
 public class RgbToHexCodeConversion
         implements ColourCodeConversion<RgbCode, HexCode> {
 
@@ -18,28 +20,23 @@ public class RgbToHexCodeConversion
     }
 
     @Override
-    public HexCode convert(RgbCode codification) {
-        return new HexCode("#"
-                + extractRedFrom(codification)
-                + extractGreenFrom(codification)
-                + extractBlueFrom(codification)
-        );
-    }
+    public HexCode convert(RgbCode rgbCode) {
+        int rgb = ((denormalize(0, 255, rgbCode.alpha()) & 0xFF) << 24) |
+                ((rgbCode.red255() & 0xFF) << 16) |
+                ((rgbCode.green255() & 0xFF) << 8) |
+                ((rgbCode.blue255() & 0xFF));
 
-    private String extractRedFrom(RgbCode codification) {
-        return castIntToHex(codification.red255());
-    }
+        String opacity = castIntToHex(rgb).substring(0, 2);
+        String hexColour = castIntToHex(rgb).substring(2, 8);
 
-    private String extractGreenFrom(RgbCode codification) {
-        return castIntToHex(codification.green255());
-    }
-
-    private String extractBlueFrom(RgbCode codification) {
-        return castIntToHex(codification.blue255());
+        if(opacity.equals("FF"))
+            return new HexCode("#" + hexColour);
+        else
+            return new HexCode("#" + hexColour + opacity);
     }
 
     private String castIntToHex(int number) {
-        return String.format("%02x", number);
+        return Integer.toHexString(number);
     }
 
 }
