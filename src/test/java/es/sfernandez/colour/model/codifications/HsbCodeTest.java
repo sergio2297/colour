@@ -24,6 +24,11 @@ class HsbCodeTest {
     }
 
     @Test
+    void createWith_negativeFloatAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HsbCode(0f, 0f, 0f, -1f));
+    }
+
+    @Test
     void createWith_biggerThanOneHueValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HsbCode(1.1f, 0f, 0f));
     }
@@ -36,6 +41,11 @@ class HsbCodeTest {
     @Test
     void createWith_biggerThanOneBrightnessValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HsbCode(0f, 0f, 1.1f));
+    }
+
+    @Test
+    void createWith_biggerThanOneFloatAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HsbCode(0f, 0f, 0f, 1.1f));
     }
 
     @Test
@@ -54,6 +64,11 @@ class HsbCodeTest {
     }
 
     @Test
+    void createWith_negativePercentageAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HsbCode(0, 0, 0, -20));
+    }
+
+    @Test
     void createWith_biggerThan360HueValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HsbCode(361, 0, 0));
     }
@@ -66,6 +81,18 @@ class HsbCodeTest {
     @Test
     void createWith_biggerThan100BrightnessValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HsbCode(0, 0, 101));
+    }
+
+    @Test
+    void createWith_biggerThan100PercentageAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HsbCode(0, 0, 0, 150));
+    }
+
+    @Test
+    void createWithoutSpecifyOpacity_assignsFullOpacityTest() {
+        HsbCode hsl = new HsbCode(0, 0, 0);
+
+        assertThat(hsl.isOpaque()).isTrue();
     }
 
     @Test
@@ -90,6 +117,13 @@ class HsbCodeTest {
     }
 
     @Test
+    void alphaValue_createdFromPercentage_isCorrectlyNormalizedTest() {
+        HsbCode hsl = new HsbCode(0, 0, 0, 85);
+
+        assertThat(hsl.alpha()).isEqualTo(0.85f);
+    }
+    
+    @Test
     void hueValue_createdFromNormalizedValue_isCorrectlyNormalizedToDegreesTest() {
         HsbCode hsb = new HsbCode(0.75f, 0, 0);
 
@@ -110,4 +144,11 @@ class HsbCodeTest {
         assertThat(hsb.brightnessPercentage()).isEqualTo(75);
     }
 
+    @Test
+    void alphaValue_createdFromNormalizedValue_isCorrectlyNormalizedToPercentageTest() {
+        HsbCode hsl = new HsbCode(0, 0, 0, 0.33f);
+
+        assertThat(hsl.alphaPercentage()).isEqualTo(33);
+    }
+    
 }
