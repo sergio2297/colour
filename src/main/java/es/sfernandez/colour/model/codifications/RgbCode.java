@@ -1,7 +1,11 @@
 package es.sfernandez.colour.model.codifications;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
+import static es.sfernandez.colour.model.utils.NumUtils.normalize;
 
 /**
  *
@@ -9,25 +13,44 @@ import java.util.regex.Pattern;
  * @param green value between [0, 1]
  * @param blue value between [0, 1]
  */
-public record RgbCode(float red, float green, float blue)
-        implements AcceptedByCssColourCode {
+public record RgbCode(float red, float green, float blue, float alpha)
+        implements AcceptedByCssColourCode, HasOpacity {
 
     //---- Constants y Definitions ----
     public static final Pattern cssCodePattern = Pattern.compile("rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)");
+    public static final Pattern cssCodeWithTransparencyPattern = Pattern.compile("rgba\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(1|0(\\.\\d{1,2})?)\\s*\\)");
 
     //---- Constructor ---
     public RgbCode {
-        assertIsValid(red, "Red");
-        assertIsValid(green, "Green");
-        assertIsValid(blue, "Blue");
+        assertIsNormalizedValue(red, "Red");
+        assertIsNormalizedValue(green, "Green");
+        assertIsNormalizedValue(blue, "Blue");
+        assertIsNormalizedValue(alpha, "Alpha");
+    }
+
+    public RgbCode(float red, float green, float blue) {
+        this(red, green, blue, 1.0f);
+    }
+
+    public RgbCode(int red, int green, int blue, int alpha) {
+        this(normalize255(red),
+                normalize255(green),
+                normalize255(blue),
+                normalizePercentage(alpha)
+        );
     }
 
     public RgbCode(int red, int green, int blue) {
-        this(normalize(red, "Red"), normalize(green, "Green"), normalize(blue, "Blue"));
+        this(red, green, blue, 100);
     }
 
     public RgbCode(String cssCode) {
-        this(extractRedValueFromCssCode(cssCode), extractGreenValueFromCssCode(cssCode), extractBlueValueFromCssCode(cssCode));
+        this(
+                extractRedValueFromCssCode(cssCode),
+                extractGreenValueFromCssCode(cssCode),
+                extractBlueValueFromCssCode(cssCode),
+                extractAlphaValueFromCssCode(cssCode)
+        );
     }
 
     private static int extractRedValueFromCssCode(String cssCode) {
@@ -42,8 +65,20 @@ public record RgbCode(float red, float green, float blue)
         return Integer.parseInt(matchCssCode(cssCode).group(3));
     }
 
+    private static int extractAlphaValueFromCssCode(String cssCode) {
+        Matcher matcher = cssCodeWithTransparencyPattern.matcher(cssCode);
+
+        if(!matcher.matches())
+            return 100;
+        else
+            return denormalize(0, 100, Float.parseFloat(matcher.group(4)));
+    }
+
     private static Matcher matchCssCode(String cssCode) {
-        Matcher matcher = cssCodePattern.matcher(cssCode);
+        Matcher matcher = cssCodeWithTransparencyPattern.matcher(cssCode);
+
+        if(!matcher.matches())
+            matcher = cssCodePattern.matcher(cssCode);
 
         if(!matcher.matches())
             throw new IllegalArgumentException("Given expression doesn't match CSS rgb code. (value='" + cssCode + "')");
@@ -51,7 +86,7 @@ public record RgbCode(float red, float green, float blue)
         return matcher;
     }
 
-    private static void assertIsValid(float value, String propertyName) {
+    private static void assertIsNormalizedValue(float value, String propertyName) {
         if(isNotBetween0And1(value))
             throw new IllegalArgumentException(propertyName + " value is out of range [0.0, 1.0]. (value=" + value + ")");
     }
@@ -60,37 +95,37 @@ public record RgbCode(float red, float green, float blue)
         return value < 0.0f || value > 1.0f;
     }
 
-    private static float normalize(int value, String propertyName) {
-        if(isNotBetween0And255(value))
-            throw new IllegalArgumentException(propertyName + " value is out of range [0, 255]. (value=" + value + ")");
-
-        return value / 255.0f;
-    }
-
-    private static boolean isNotBetween0And255(int value) {
-        return value < 0 || value > 255;
-    }
-
     //---- Methods ----
     @Override
     public String toCssCode() {
-        return String.format("rgb(%d, %d, %d)", red255(), green255(), blue255());
+        if(isOpaque())
+            return String.format("rgb(%d, %d, %d)", red255(), green255(), blue255());
+        else
+            return String.format(Locale.US, "rgba(%d, %d, %d, %.2f)", red255(), green255(), blue255(), alpha());
     }
 
     public int red255() {
-        return normalizeTo255(red);
+        return denormalize255(red);
     }
 
     public int green255() {
-        return normalizeTo255(green);
+        return denormalize255(green);
     }
 
     public int blue255() {
-        return normalizeTo255(blue);
+        return denormalize255(blue);
     }
 
-    private int normalizeTo255(final float value) {
-        return (int) (value * 255);
+    private static float normalize255(int value) {
+        return normalize(0, 255, value);
+    }
+
+    private static int denormalize255(final float value) {
+        return denormalize(0, 255, value);
+    }
+
+    private static float normalizePercentage(int value) {
+        return normalize(0, 100, value);
     }
 
 }
