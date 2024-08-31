@@ -4,8 +4,8 @@ import es.sfernandez.colour.model.codifications.HexCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
 import es.sfernandez.colour.model.conversion.ColourCodeConversion;
 
+import static es.sfernandez.colour.model.utils.NumUtils.castHexToInt;
 import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
-import static es.sfernandez.colour.model.utils.NumUtils.normalize;
 
 public class HexToRgbCodeConversion
         implements ColourCodeConversion<HexCode, RgbCode> {
@@ -52,20 +52,7 @@ public class HexToRgbCodeConversion
     }
 
     private int extractAlphaFrom(HexCode hexCode) {
-        if(!hexCode.hasExplicitOpacity())
-            return 100;
-
-        int opacity = hexCode.isSimplified()
-            ? castHexToInt(hexCode.value().substring(4, 5).repeat(2))
-            : castHexToInt(hexCode.value().substring(7, 9));
-        
-        return denormalize(0, 100, 
-                normalize(0, 255, opacity)
-        );
-    }
-
-    private int castHexToInt(String hexNumber) {
-        return Integer.parseInt(hexNumber,16);
+        return denormalize(0, 100, hexCode.alpha());
     }
 
 }

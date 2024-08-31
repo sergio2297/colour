@@ -53,4 +53,8 @@ public class NumUtils {
         return !isBetween(min, max, number);
     }
 
+    public static int castHexToInt(String hexNumber) {
+        return Integer.parseInt(hexNumber,16);
+    }
+
 }

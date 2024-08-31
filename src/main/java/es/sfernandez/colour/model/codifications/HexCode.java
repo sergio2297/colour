@@ -4,6 +4,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static es.sfernandez.colour.model.utils.NumUtils.castHexToInt;
+import static es.sfernandez.colour.model.utils.NumUtils.normalize;
+
 public final class HexCode
         implements AcceptedByCssColourCode {
 
@@ -100,6 +103,24 @@ public final class HexCode
             simplifiedValue.append(value.charAt(i));
 
         return simplifiedValue.toString();
+    }
+
+    @Override
+    public float alpha() {
+        return hasExplicitOpacity()
+                ? getOpacityFromHexCode()
+                : 1.0f;
+    }
+
+    private float getOpacityFromHexCode() {
+        if(!hasExplicitOpacity())
+            return 1.0f;
+
+        int opacity = isSimplified()
+                ? castHexToInt(value.substring(3, 4).repeat(2))
+                : castHexToInt(value.substring(6, 8));
+
+        return normalize(0, 255, opacity);
     }
 
     public boolean hasExplicitOpacity() {

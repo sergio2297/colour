@@ -1,5 +1,6 @@
 package es.sfernandez.colour.model.codifications;
 
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -106,6 +107,22 @@ class HexCodeTest {
     void hexCode_hasNotExplicitOpacity_ifItsLengthIsThreeOrSixTest() {
         assertThat(new HexCode("#ABC").hasExplicitOpacity()).isFalse();
         assertThat(new HexCode("#AABBCC").hasExplicitOpacity()).isFalse();
+    }
+
+    @Test
+    void getAlpha_fromImplicitOpacity_isOneTest() {
+        assertThat(new HexCode("#ABC").alpha()).isEqualTo(1.0f);
+        assertThat(new HexCode("#AABBCC").alpha()).isEqualTo(1.0f);
+    }
+
+    @Test
+    void getAlpha_fromSimplifiedHexCode_worksTest() {
+        assertThat(new HexCode("#ABC0").alpha()).isEqualTo(0f);
+    }
+
+    @Test
+    void getAlpha_fromHexCode_worksTest() {
+        assertThat(new HexCode("#AABBCC80").alpha()).isCloseTo(0.5f, Offset.offset(0.005f));
     }
 
     @Test
