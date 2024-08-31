@@ -26,6 +26,11 @@ class HslCodeTest {
     }
 
     @Test
+    void createWith_negativeFloatAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(0f, 0f, 0f, -1f));
+    }
+
+    @Test
     void createWith_biggerThanOneHueValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HslCode(1.1f, 0f, 0f));
     }
@@ -38,6 +43,11 @@ class HslCodeTest {
     @Test
     void createWith_biggerThanOneLightnessValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HslCode(0f, 0f, 1.1f));
+    }
+
+    @Test
+    void createWith_biggerThanOneFloatAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(0f, 0f, 0f, 1.1f));
     }
 
     @Test
@@ -56,6 +66,11 @@ class HslCodeTest {
     }
 
     @Test
+    void createWith_negativePercentageAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(0, 0, 0, -20));
+    }
+
+    @Test
     void createWith_biggerThan360HueValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HslCode(361, 0, 0));
     }
@@ -68,6 +83,18 @@ class HslCodeTest {
     @Test
     void createWith_biggerThan100LightnessValue_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new HslCode(0, 0, 101));
+    }
+
+    @Test
+    void createWith_biggerThan100PercentageAlphaValue_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(0, 0, 0, 150));
+    }
+
+    @Test
+    void createWithoutSpecifyOpacity_assignsFullOpacityTest() {
+        HslCode hsl = new HslCode(0, 0, 0);
+
+        assertThat(hsl.isOpaque()).isTrue();
     }
 
     @Test
@@ -92,6 +119,13 @@ class HslCodeTest {
     }
 
     @Test
+    void alphaValue_createdFromPercentage_isCorrectlyNormalizedTest() {
+        HslCode hsl = new HslCode(0, 0, 0, 85);
+
+        assertThat(hsl.alpha()).isEqualTo(0.85f);
+    }
+
+    @Test
     void hueValue_createdFromNormalizedValue_isCorrectlyNormalizedToDegreesTest() {
         HslCode hsl = new HslCode(0.75f, 0, 0);
 
@@ -113,6 +147,13 @@ class HslCodeTest {
     }
 
     @Test
+    void alphaValue_createdFromNormalizedValue_isCorrectlyNormalizedToPercentageTest() {
+        HslCode hsl = new HslCode(0, 0, 0, 0.33f);
+
+        assertThat(hsl.alphaPercentage()).isEqualTo(33);
+    }
+
+    @Test
     void cssCode_isCorrectlyGenerated_fromNormalizedCodeTest() {
         HslCode hsl = new HslCode(0.25f, 0.5f, 0.75f);
 
@@ -120,10 +161,24 @@ class HslCodeTest {
     }
 
     @Test
-    void cssCode_isCorrectlyGenerated_fromNormalized255CodeTest() {
+    void cssCode_isCorrectlyGenerated_fromNormalizedPercentageCodeTest() {
         HslCode hsl = new HslCode(230, 15, 88);
 
         assertThat(hsl.toCssCode()).isEqualTo("hsl(230, 15%, 88%)");
+    }
+
+    @Test
+    void cssCode_isCorrectlyGenerated_fromNormalizedCodeWithTransparencyTest() {
+        HslCode hsl = new HslCode(0.25f, 0.5f, 0.75f, 0.33f);
+
+        assertThat(hsl.toCssCode()).isEqualTo("hsla(90, 50%, 75%, 0.33)");
+    }
+
+    @Test
+    void cssCode_isCorrectlyGenerated_fromNormalizedPercentageCodeWithTransparencyTest() {
+        HslCode hsl = new HslCode(3, 9, 19, 95);
+
+        assertThat(hsl.toCssCode()).isEqualTo("hsla(3, 9%, 19%, 0.95)");
     }
 
     @Test
@@ -131,10 +186,19 @@ class HslCodeTest {
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hls(0,0,0)"));
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl[0,0,0]"));
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0,0,0,0)"));
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(-1,0,0)"));
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0,0.5,0)"));
         assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(90,0%,45)"));
+    }
+
+    @Test
+    void createFromIncorrectCssCode_withTransparency_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hlsa(0,0,0,0)"));
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla[0,0,0,0]"));
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0)"));
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0,0,0,0)"));
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0,0,0,-0.5)"));
+        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0,0,0,0,5)"));
     }
 
     @ParameterizedTest
@@ -145,6 +209,17 @@ class HslCodeTest {
         assertThat(hsl.hueDegrees()).isEqualTo(63);
         assertThat(hsl.saturationPercentage()).isEqualTo(27);
         assertThat(hsl.lightnessPercentage()).isEqualTo(88);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"hsla(63, 27%, 88%, 0.18)", "hsla(63   , 27%, 88%  ,    0.18  )", "hsla(63,27%,88%,0.18)"})
+    void createFromCssCode_withTransparency_worksTest(String cssCode) {
+        HslCode hsla = new HslCode(cssCode);
+
+        assertThat(hsla.hueDegrees()).isEqualTo(63);
+        assertThat(hsla.saturationPercentage()).isEqualTo(27);
+        assertThat(hsla.lightnessPercentage()).isEqualTo(88);
+        assertThat(hsla.alpha()).isEqualTo(0.18f);
     }
 
 }

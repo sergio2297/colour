@@ -5,8 +5,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
-import static es.sfernandez.colour.model.utils.NumUtils.normalize;
+import static es.sfernandez.colour.model.utils.NumUtils.*;
 
 /**
  *
@@ -15,7 +14,7 @@ import static es.sfernandez.colour.model.utils.NumUtils.normalize;
  * @param blue value between [0, 1]
  */
 public record RgbCode(float red, float green, float blue, float alpha)
-        implements AcceptedByCssColourCode, HasOpacity {
+        implements AcceptedByCssColourCode {
 
     //---- Constants y Definitions ----
     public static final Pattern cssCodePattern = Pattern.compile("rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)");
@@ -88,12 +87,8 @@ public record RgbCode(float red, float green, float blue, float alpha)
     }
 
     private static void assertIsNormalizedValue(float value, String propertyName) {
-        if(isNotBetween0And1(value))
+        if(isNotBetween(0f, 1f, value))
             throw new IllegalArgumentException(propertyName + " value is out of range [0.0, 1.0]. (value=" + value + ")");
-    }
-
-    private static boolean isNotBetween0And1(float value) {
-        return value < 0.0f || value > 1.0f;
     }
 
     //---- Methods ----
