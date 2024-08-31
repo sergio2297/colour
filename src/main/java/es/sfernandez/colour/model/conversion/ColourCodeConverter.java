@@ -5,6 +5,8 @@ import es.sfernandez.colour.model.conversion.cmyk.CmykToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.cmyk.RgbToCmykCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.HexToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.RgbToHexCodeConversion;
+import es.sfernandez.colour.model.conversion.hsl.HslToRgbCodeConversion;
+import es.sfernandez.colour.model.conversion.hsl.RgbToHslCodeConversion;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +17,8 @@ public class ColourCodeConverter {
     //---- Constants and Definitions ----
     public static final List<ColourCodeConversion<?,?>> DEFAULT_AVAILABLE_CONVERSIONS = List.of(
         new HexToRgbCodeConversion(), new RgbToHexCodeConversion(), // HexCode
-        new CmykToRgbCodeConversion(), new RgbToCmykCodeConversion() // CmykCode
+        new CmykToRgbCodeConversion(), new RgbToCmykCodeConversion(), // CmykCode
+        new HslToRgbCodeConversion(), new RgbToHslCodeConversion() // HslCode
     );
 
     //---- Attributes ----

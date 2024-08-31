@@ -4,10 +4,7 @@ import es.sfernandez.colour.model.codifications.AcceptedByCssColourCode;
 import es.sfernandez.colour.model.codifications.ColourCode;
 import es.sfernandez.colour.model.codifications.HexCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
-import es.sfernandez.colour.model.conversion.fixtures.CmykCodeFixtures;
-import es.sfernandez.colour.model.conversion.fixtures.ColourCodeFixtures;
-import es.sfernandez.colour.model.conversion.fixtures.HexCodeFixtures;
-import es.sfernandez.colour.model.conversion.fixtures.RgbCodeFixtures;
+import es.sfernandez.colour.model.conversion.fixtures.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -45,7 +42,7 @@ public class ColourCodeConverterTest {
     //---- Fixtures ----
     private static final ColourCodeFixtures<?> rgbColourCodeFixture = new RgbCodeFixtures();
     private static final ColourCodeFixtures<?>[] notRgbColourCodeFixtures = {
-        new HexCodeFixtures(), new CmykCodeFixtures()
+        new HexCodeFixtures(), new CmykCodeFixtures(), new HslCodeFixtures()
     };
 
     static Stream<Arguments> eachColourCodeConversionsToItselfTestCases() {
@@ -216,7 +213,13 @@ public class ColourCodeConverterTest {
 //        assertThat(reconvertedInput).isEqualTo(testCase.input);
 //     }
 
-        assertThat(out).isEqualTo(testCase.expected);
+    @Test
+    void convert_colourCode_directly() {
+        ColourCode in = new CmykCodeFixtures().grey();
+        ColourCode out = converter.convert(in, RgbCode.class);
+        ColourCode expected = new RgbCodeFixtures().grey();
+
+        assertThat(out).isEqualTo(expected);
     }
 
 }

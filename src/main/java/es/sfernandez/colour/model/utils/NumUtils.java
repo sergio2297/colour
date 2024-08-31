@@ -15,8 +15,21 @@ public class NumUtils {
         return max;
     }
 
-    public static float round(final float number, final int precision) {
-        float offset = (float) Math.pow(10.0, precision);
+    public static float min(final float ... numbers) {
+        if(numbers == null || numbers.length == 0)
+            throw new IllegalArgumentException("Error. It's necessary to specify at least one number");
+
+        float min = numbers[0];
+
+        for(int i = 1; i < numbers.length; ++i)
+            if(min > numbers[i])
+                min = numbers[i];
+
+        return min;
+    }
+
+    public static float round(final float number, final int numOfDecimals) {
+        float offset = (float) Math.pow(10.0, numOfDecimals);
         return Math.round(number * offset) / offset;
     }
 
