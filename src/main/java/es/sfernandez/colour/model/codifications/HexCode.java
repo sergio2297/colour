@@ -47,6 +47,11 @@ public final class HexCode
     }
 
     @Override
+    public String toString() {
+        return toCssCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HexCode hexCode)) return false;
