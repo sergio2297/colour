@@ -22,9 +22,12 @@ public final class HexCode
     }
 
     private String inferValueFrom(String code) {
-        Matcher matcher = matchHexCode(code);
+        String value = matchHexCode(code).group(1).toUpperCase();
 
-        return "#" + matcher.group(1).toUpperCase();
+        if(hasUnnecessaryExplicitOpacity(value))
+            value = removeOpacity(value);
+
+        return "#" + value;
     }
 
     private Matcher matchHexCode(String code) {
@@ -34,6 +37,17 @@ public final class HexCode
             throw new IllegalArgumentException("Given expression doesn't match an HexCode. (value='" + code + "')");
 
         return matcher;
+    }
+
+    private boolean hasUnnecessaryExplicitOpacity(String value) {
+        return (value.length() == 4 && value.charAt(3) == 'F')
+                || (value.length() == 8 && value.endsWith("FF"));
+    }
+
+    private String removeOpacity(String value) {
+        return value.length() == 4
+                ? value.substring(0, 3)
+                : value.substring(0, 6);
     }
 
     //---- Methods ----

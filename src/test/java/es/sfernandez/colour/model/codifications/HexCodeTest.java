@@ -52,6 +52,22 @@ class HexCodeTest {
         assertThat(hexCode.value()).isEqualTo("#B1C2D3FE");
     }
 
+    @Test
+    void createSimplifiedWithFullOpacity_suppressOpacityTest() {
+        String code = "#FFFF";
+        HexCode hexCode = new HexCode(code);
+
+        assertThat(hexCode.value()).isEqualTo("#FFF");
+    }
+
+    @Test
+    void createWithFullOpacity_suppressOpacityTest() {
+        String code = "#B1C2D3FF";
+        HexCode hexCode = new HexCode(code);
+
+        assertThat(hexCode.value()).isEqualTo("#B1C2D3");
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"#fff", "#123456", "123", "#aaff", "#AaBbCcDd"})
     void cssCodeIsEqualToValueTest(String cssCode) {
@@ -72,6 +88,14 @@ class HexCodeTest {
     void hexCodes_areEqual_iffTheyRepresentTheSameColourTest() {
         HexCode code1 = new HexCode("aBcF05");
         HexCode code2 = new HexCode("#ABCF05");
+
+        assertThat(code1).isEqualTo(code2);
+    }
+
+    @Test
+    void hexCodes_areEqual_iffTheyRepresentTheSameColour_and_bothAreOpaqueTest() {
+        HexCode code1 = new HexCode("aBcF05");
+        HexCode code2 = new HexCode("#ABCF05FF");
 
         assertThat(code1).isEqualTo(code2);
     }
