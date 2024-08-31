@@ -85,6 +85,26 @@ class HexCodeTest {
     }
 
     @Test
+    void hexCode_isSimplified_ifItsLengthIsThreeOrFourTest() {
+        assertThat(new HexCode("#AAB").isSimplified()).isTrue();
+        assertThat(new HexCode("#AABF").isSimplified()).isTrue();
+    }
+
+    @Test
+    void hexCode_isNotSimplified_ifItsLengthIsSixOrEightTest() {
+        assertThat(new HexCode("#AABBCC").isSimplified()).isFalse();
+        assertThat(new HexCode("#AABBCCDD").isSimplified()).isFalse();
+    }
+
+    @Test
+    void hexCodes_areEqual_iffTheyRepresentTheSameColour_noMatherIfOneOfThemIsSimplifiedTest() {
+        HexCode code1 = new HexCode("abcd");
+        HexCode code2 = new HexCode("#AABBCCDD");
+
+        assertThat(code1).isEqualTo(code2);
+    }
+
+    @Test
     void hexCodes_areEqual_iffTheyRepresentTheSameColourTest() {
         HexCode code1 = new HexCode("aBcF05");
         HexCode code2 = new HexCode("#ABCF05");

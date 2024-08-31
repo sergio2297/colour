@@ -27,7 +27,7 @@ public final class HexCode
         if(hasUnnecessaryExplicitOpacity(value))
             value = removeOpacity(value);
 
-        return "#" + value;
+        return value;
     }
 
     private Matcher matchHexCode(String code) {
@@ -52,12 +52,12 @@ public final class HexCode
 
     //---- Methods ----
     public String value() {
-        return value;
+        return "#" + value;
     }
 
     @Override
     public String toCssCode() {
-        return value;
+        return value();
     }
 
     @Override
@@ -69,11 +69,43 @@ public final class HexCode
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof HexCode hexCode)) return false;
-        return Objects.equals(value, hexCode.value);
+
+        return Objects.equals(simplifyIfPossible(value), simplifyIfPossible(hexCode.value));
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
     }
+
+    public boolean isSimplified() {
+        return value.length() == 3 || value.length() == 4;
+    }
+
+    private String simplifyIfPossible(String hexCode) {
+        return canBeSimplified(hexCode)
+                ? simplify(hexCode) : hexCode;
+    }
+
+    private boolean canBeSimplified(String value) {
+        if(value.length() == 6 || value.length() == 8) {
+            for(int i = 0; i < value.length(); i+=2)
+                if(value.charAt(i) != value.charAt(i +1))
+                    return false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private String simplify(String value) {
+        StringBuilder simplifiedValue = new StringBuilder();
+
+        for(int i = 0; i < value.length(); i+=2)
+            simplifiedValue.append(value.charAt(i));
+
+        return simplifiedValue.toString();
+    }
+
 }
