@@ -1,6 +1,7 @@
 package es.sfernandez.colour.model.codifications;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,6 +103,22 @@ public record RgbCode(float red, float green, float blue, float alpha)
             return String.format("rgb(%d, %d, %d)", red255(), green255(), blue255());
         else
             return String.format(Locale.US, "rgba(%d, %d, %d, %.2f)", red255(), green255(), blue255(), alpha());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RgbCode rgbCode)) return false;
+
+        return red255() == rgbCode.red255()
+                && green255() == rgbCode.green255()
+                && blue255() == rgbCode.blue255()
+                && alphaPercentage() == rgbCode.alphaPercentage();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(red255(), green255(), blue255(), alphaPercentage());
     }
 
     public int red255() {
