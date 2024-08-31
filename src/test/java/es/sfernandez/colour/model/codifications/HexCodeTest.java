@@ -53,19 +53,19 @@ class HexCodeTest {
     }
 
     @Test
-    void createSimplifiedWithFullOpacity_suppressOpacityTest() {
+    void createSimplifiedWithExplicitFullOpacity_doesNotSuppressOpacityTest() {
         String code = "#FFFF";
         HexCode hexCode = new HexCode(code);
 
-        assertThat(hexCode.value()).isEqualTo("#FFF");
+        assertThat(hexCode.value()).isEqualTo("#FFFF");
     }
 
     @Test
-    void createWithFullOpacity_suppressOpacityTest() {
+    void createWithExplicitFullOpacity_doesNotSuppressOpacityTest() {
         String code = "#B1C2D3FF";
         HexCode hexCode = new HexCode(code);
 
-        assertThat(hexCode.value()).isEqualTo("#B1C2D3");
+        assertThat(hexCode.value()).isEqualTo("#B1C2D3FF");
     }
 
     @ParameterizedTest
@@ -94,6 +94,18 @@ class HexCodeTest {
     void hexCode_isNotSimplified_ifItsLengthIsSixOrEightTest() {
         assertThat(new HexCode("#AABBCC").isSimplified()).isFalse();
         assertThat(new HexCode("#AABBCCDD").isSimplified()).isFalse();
+    }
+
+    @Test
+    void hexCode_hasExplicitOpacity_ifItsLengthIsFourOrEightTest() {
+        assertThat(new HexCode("#ABCF").hasExplicitOpacity()).isTrue();
+        assertThat(new HexCode("#AABBCCFF").hasExplicitOpacity()).isTrue();
+    }
+
+    @Test
+    void hexCode_hasNotExplicitOpacity_ifItsLengthIsThreeOrSixTest() {
+        assertThat(new HexCode("#ABC").hasExplicitOpacity()).isFalse();
+        assertThat(new HexCode("#AABBCC").hasExplicitOpacity()).isFalse();
     }
 
     @Test

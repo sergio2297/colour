@@ -18,16 +18,11 @@ public final class HexCode
         if(code == null || code.isBlank())
             throw new IllegalArgumentException("Can not create an HexCode with null/blank value.");
 
-        this.value = inferValueFrom(code);
+        this.value = extractValueFrom(code);
     }
 
-    private String inferValueFrom(String code) {
-        String value = matchHexCode(code).group(1).toUpperCase();
-
-        if(hasUnnecessaryExplicitOpacity(value))
-            value = removeOpacity(value);
-
-        return value;
+    private String extractValueFrom(String code) {
+        return matchHexCode(code).group(1).toUpperCase();
     }
 
     private Matcher matchHexCode(String code) {
@@ -37,17 +32,6 @@ public final class HexCode
             throw new IllegalArgumentException("Given expression doesn't match an HexCode. (value='" + code + "')");
 
         return matcher;
-    }
-
-    private boolean hasUnnecessaryExplicitOpacity(String value) {
-        return (value.length() == 4 && value.charAt(3) == 'F')
-                || (value.length() == 8 && value.endsWith("FF"));
-    }
-
-    private String removeOpacity(String value) {
-        return value.length() == 4
-                ? value.substring(0, 3)
-                : value.substring(0, 6);
     }
 
     //---- Methods ----
@@ -70,21 +54,31 @@ public final class HexCode
         if (this == o) return true;
         if (!(o instanceof HexCode hexCode)) return false;
 
-        return Objects.equals(simplifyIfPossible(value), simplifyIfPossible(hexCode.value));
+        return Objects.equals(
+                reduceAsMuchAsPossible(value),
+                reduceAsMuchAsPossible(hexCode.value)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(value);
+        return Objects.hashCode(reduceAsMuchAsPossible(value));
+    }
+
+    private String reduceAsMuchAsPossible(final String hexCode) {
+        String value = hexCode;
+
+        if(hasUnnecessaryExplicitOpacity(value))
+            value = removeOpacity(value);
+
+        if(canBeSimplified(value))
+            value = simplify(value);
+
+        return value;
     }
 
     public boolean isSimplified() {
         return value.length() == 3 || value.length() == 4;
-    }
-
-    private String simplifyIfPossible(String hexCode) {
-        return canBeSimplified(hexCode)
-                ? simplify(hexCode) : hexCode;
     }
 
     private boolean canBeSimplified(String value) {
@@ -108,4 +102,18 @@ public final class HexCode
         return simplifiedValue.toString();
     }
 
+    public boolean hasExplicitOpacity() {
+        return value.length() == 4 || value.length() == 8;
+    }
+
+    private boolean hasUnnecessaryExplicitOpacity(String value) {
+        return (value.length() == 4 && value.charAt(3) == 'F')
+                || (value.length() == 8 && value.endsWith("FF"));
+    }
+
+    private String removeOpacity(String value) {
+        return value.length() == 4
+                ? value.substring(0, 3)
+                : value.substring(0, 6);
+    }
 }
