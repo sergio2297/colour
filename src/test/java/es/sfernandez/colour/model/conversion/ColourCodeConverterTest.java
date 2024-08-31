@@ -4,6 +4,7 @@ import es.sfernandez.colour.model.codifications.AcceptedByCssColourCode;
 import es.sfernandez.colour.model.codifications.ColourCode;
 import es.sfernandez.colour.model.codifications.HexCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
+import es.sfernandez.colour.model.conversion.fixtures.CmykCodeFixtures;
 import es.sfernandez.colour.model.conversion.fixtures.ColourCodeFixtures;
 import es.sfernandez.colour.model.conversion.fixtures.HexCodeFixtures;
 import es.sfernandez.colour.model.conversion.fixtures.RgbCodeFixtures;
@@ -44,7 +45,7 @@ public class ColourCodeConverterTest {
     //---- Fixtures ----
     private static final ColourCodeFixtures<?> rgbColourCodeFixture = new RgbCodeFixtures();
     private static final ColourCodeFixtures<?>[] notRgbColourCodeFixtures = {
-        new HexCodeFixtures()
+        new HexCodeFixtures(), new CmykCodeFixtures()
     };
 
     static Stream<Arguments> eachColourCodeConversionsToItselfTestCases() {

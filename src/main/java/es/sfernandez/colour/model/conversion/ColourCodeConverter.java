@@ -1,6 +1,8 @@
 package es.sfernandez.colour.model.conversion;
 
 import es.sfernandez.colour.model.codifications.ColourCode;
+import es.sfernandez.colour.model.conversion.cmyk.CmykToRgbCodeConversion;
+import es.sfernandez.colour.model.conversion.cmyk.RgbToCmykCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.HexToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.RgbToHexCodeConversion;
 
@@ -12,7 +14,8 @@ public class ColourCodeConverter {
 
     //---- Constants and Definitions ----
     public static final List<ColourCodeConversion<?,?>> DEFAULT_AVAILABLE_CONVERSIONS = List.of(
-        new HexToRgbCodeConversion(), new RgbToHexCodeConversion() // HexCode
+        new HexToRgbCodeConversion(), new RgbToHexCodeConversion(), // HexCode
+        new CmykToRgbCodeConversion(), new RgbToCmykCodeConversion() // CmykCode
     );
 
     //---- Attributes ----
