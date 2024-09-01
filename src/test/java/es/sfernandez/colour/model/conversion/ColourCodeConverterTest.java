@@ -42,7 +42,7 @@ public class ColourCodeConverterTest {
     //---- Fixtures ----
     private static final ColourCodeFixtures<?> rgbColourCodeFixture = new RgbCodeFixtures();
     private static final ColourCodeFixtures<?>[] notRgbColourCodeFixtures = {
-        new HexCodeFixtures(), new CmykCodeFixtures(), new HslCodeFixtures()
+        new HexCodeFixtures(), new CmykCodeFixtures(), new HslCodeFixtures(), new HsbCodeFixtures()
     };
 
     static Stream<Arguments> eachColourCodeConversionsToItselfTestCases() {
