@@ -17,6 +17,29 @@ public interface ColourCodeConversion<IN extends ColourCode, OUT extends ColourC
         return convert(in);
     }
 
+    default <V extends ColourCode> ColourCodeConversion<IN, V> andThen(ColourCodeConversion<? super OUT, ? extends V> after) {
+        Class<IN> inClass = inColourCodeClass();
+        Class<? extends V> outClass = after.outColourCodeClass();
+        ColourCodeConversion<IN, OUT> firstStep = this;
+
+        return new ColourCodeConversion<>() {
+            @Override
+            public Class<IN> inColourCodeClass() {
+                return inClass;
+            }
+
+            @Override
+            public Class<V> outColourCodeClass() {
+                return (Class<V>) outClass;
+            }
+
+            @Override
+            public V convert(IN codification) {
+                return after.convert(firstStep.convert(codification));
+            }
+        };
+    }
+
     static <CODE extends ColourCode> ColourCodeConversion<CODE, CODE> identity(final Class<CODE> colourCodeClass) {
         return new ColourCodeConversion<>() {
             @Override
