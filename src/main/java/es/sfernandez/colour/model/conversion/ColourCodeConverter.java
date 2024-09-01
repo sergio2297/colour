@@ -53,12 +53,21 @@ public class ColourCodeConverter {
         if(colourCode.getClass().equals(targetColourCodeClass))
             return (B) colourCode;
 
-        ColourCodeConversion<A, B> conversion = (ColourCodeConversion<A, B>) searchDirectConversion(colourCode.getClass(), targetColourCodeClass);
+        ColourCodeConversion<A, B> conversion = (ColourCodeConversion<A, B>) searchConversion(colourCode.getClass(), targetColourCodeClass);
         if(conversion == null)
             throw new IllegalArgumentException("Error. There isn't any available conversion that converts "
                     + colourCode.getClass().getSimpleName() + " to " + targetColourCodeClass.getSimpleName());
 
         return conversion.convert(colourCode);
+    }
+
+    private <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> searchConversion(
+            Class<A> inClass, Class<B> outClass) {
+        ColourCodeConversion<A, B> directConversion = searchDirectConversion(inClass, outClass);
+
+        return directConversion != null
+                ? directConversion
+                : searchDeepConversion(inClass, outClass, new HashSet<>());
     }
 
     private <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> searchDirectConversion(
@@ -72,24 +81,6 @@ public class ColourCodeConverter {
     }
 
     // TODO: Best way its to use a Graph and build a path of conversions. But at first, I'm gonna make it by brute force
-    public <A extends ColourCode, B extends ColourCode> B deepConvert(final A colourCode, final Class<B> targetColourCodeClass) {
-        if(colourCode == null)
-            return null;
-
-        if(targetColourCodeClass == null)
-            throw new IllegalArgumentException("Error. You must indicate the target ColourCode of the conversion.");
-
-        if(colourCode.getClass().equals(targetColourCodeClass))
-            return (B) colourCode;
-
-        ColourCodeConversion<A, B> conversion = (ColourCodeConversion<A, B>) searchDeepConversion(colourCode.getClass(), targetColourCodeClass, new HashSet<>());
-        if(conversion == null)
-            throw new IllegalArgumentException("Error. There isn't any available conversion that converts "
-                    + colourCode.getClass().getSimpleName() + " to " + targetColourCodeClass.getSimpleName());
-
-        return conversion.convert(colourCode);
-    }
-
     private <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> searchDeepConversion(
             Class<A> inClass, Class<B> outClass, Set<Class<ColourCode>> searchedInputs) {
 
