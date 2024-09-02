@@ -10,12 +10,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ColourCodeConverterTest {
@@ -95,6 +97,31 @@ public class ColourCodeConverterTest {
                 new TestCase<>(fixture1.yellow(), fixture2.yellow())
         ).map(testCase -> Arguments.of(testCase.name(), testCase))
         .toList();
+    }
+
+    //---- Methods ----
+    private static <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> dummyConversion(Class<A> in, Class<B> out) {
+        return new ColourCodeConversion<>() {
+            @Override
+            public Class<A> inColourCodeClass() {
+                return in;
+            }
+
+            @Override
+            public Class<B> outColourCodeClass() {
+                return out;
+            }
+
+            @Override
+            public B convert(A codification) {
+                try {
+                    return out.getDeclaredConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
     }
 
     //---- Tests ----
@@ -201,7 +228,7 @@ public class ColourCodeConverterTest {
         ColourCode out = converter.convert(testCase.input, testCase.expected.getClass());
 
         assertThat(out).isEqualTo(testCase.expected);
-     }
+    }
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("deepConversionsBetweenAllColourCodesTestCases")
@@ -211,6 +238,26 @@ public class ColourCodeConverterTest {
         ColourCode reconvertedInput = converter.convert(out, testCase.input.getClass());
 
         assertThat(reconvertedInput).isEqualTo(testCase.input);
-     }
+    }
+
+    private static class A implements ColourCode {}
+    private static class B implements ColourCode {}
+    private static class C implements ColourCode {}
+    private static class D implements ColourCode {}
+    private static class E implements ColourCode {}
+
+    @Test
+    void deepConversion_canConvertColours_evenIfItsNecessaryToApplyMoreThanTwoStepsTest() {
+        ColourCodeConverter converter = new ColourCodeConverter(
+                List.of(
+                        dummyConversion(A.class, B.class),
+                        dummyConversion(B.class, C.class),
+                        dummyConversion(C.class, D.class),
+                        dummyConversion(D.class, E.class)
+                )
+        );
+
+        assertDoesNotThrow(() -> converter.convert(new A(), E.class));
+    }
 
 }
