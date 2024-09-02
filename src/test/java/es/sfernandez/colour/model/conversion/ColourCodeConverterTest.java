@@ -10,17 +10,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static es.sfernandez.colour.model.conversion.ColourCodeConversionTest.dummyConversion;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ColourCodeConverterTest {
+class ColourCodeConverterTest {
 
     //---- Constants and Definitions ----
     public record TestCase<IN extends ColourCode, OUT extends ColourCode>(IN input, OUT expected) {
@@ -97,31 +97,6 @@ public class ColourCodeConverterTest {
                 new TestCase<>(fixture1.yellow(), fixture2.yellow())
         ).map(testCase -> Arguments.of(testCase.name(), testCase))
         .toList();
-    }
-
-    //---- Methods ----
-    private static <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> dummyConversion(Class<A> in, Class<B> out) {
-        return new ColourCodeConversion<>() {
-            @Override
-            public Class<A> inColourCodeClass() {
-                return in;
-            }
-
-            @Override
-            public Class<B> outColourCodeClass() {
-                return out;
-            }
-
-            @Override
-            public B convert(A codification) {
-                try {
-                    return out.getDeclaredConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
     }
 
     //---- Tests ----
@@ -240,11 +215,11 @@ public class ColourCodeConverterTest {
         assertThat(reconvertedInput).isEqualTo(testCase.input);
     }
 
-    private static class A implements ColourCode {}
-    private static class B implements ColourCode {}
-    private static class C implements ColourCode {}
-    private static class D implements ColourCode {}
-    private static class E implements ColourCode {}
+    static class A implements ColourCode {}
+    static class B implements ColourCode {}
+    static class C implements ColourCode {}
+    static class D implements ColourCode {}
+    static class E implements ColourCode {}
 
     @Test
     void deepConversion_canConvertColours_evenIfItsNecessaryToApplyMoreThanTwoStepsTest() {
