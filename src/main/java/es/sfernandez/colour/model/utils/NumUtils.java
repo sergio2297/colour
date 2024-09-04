@@ -44,6 +44,9 @@ public class NumUtils {
     }
 
     public static int denormalize(int min, int max, float number) {
+        if(min == max)
+            throw new IllegalArgumentException("Range has to contain at least one natural number. (Range: [" + min + ", " + max + "])");
+
         if(isNotBetween(0f, 1f, number))
             throw new IllegalArgumentException(number + " is out of range [0, 1], it's not possible to denormalize it.");
 

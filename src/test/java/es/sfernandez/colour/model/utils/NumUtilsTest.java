@@ -1,13 +1,13 @@
 package es.sfernandez.colour.model.utils;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Random;
 import java.util.stream.Stream;
 
-import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
-import static es.sfernandez.colour.model.utils.NumUtils.normalize;
+import static es.sfernandez.colour.model.utils.NumUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +35,37 @@ class NumUtilsTest {
                     normalize(testCase.min, testCase.max, testCase.number)
                 )
         ).isEqualTo(testCase.number);
+    }
+
+    @Test
+    void normalize_withSameMinAndMax_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> normalize(10, 10, 10));
+    }
+
+    @Test
+    void denormalize_withSameMinAndMax_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> denormalize(10, 10, 10f));
+    }
+
+    @Test
+    void denormalize_valueOutOfMinAndMaxRange_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> denormalize(10, 20, 200f));
+    }
+
+    @Test
+    void min_ofNullArray_throwsIllegalArgumentExceptionTest() {
+        float[] numbers = null;
+        assertThrows(IllegalArgumentException.class, () -> min(numbers));
+    }
+
+    @Test
+    void min_ofEmptyArray_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, NumUtils::min);
+    }
+
+    @Test
+    void max_ofNullArray_throwsIllegalArgumentExceptionTest() {
+        assertThrows(IllegalArgumentException.class, NumUtils::max);
     }
 
 }
