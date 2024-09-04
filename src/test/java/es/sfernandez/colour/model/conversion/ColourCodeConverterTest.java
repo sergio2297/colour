@@ -5,6 +5,7 @@ import es.sfernandez.colour.model.codifications.ColourCode;
 import es.sfernandez.colour.model.codifications.HexCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
 import es.sfernandez.colour.model.conversion.fixtures.*;
+import es.sfernandez.colour.model.conversion.fixtures.ColourCodeFixtures.HasOpacityFixtures;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -83,20 +84,27 @@ class ColourCodeConverterTest {
     }
 
     private static Collection<Arguments> createTestCasesOf(ColourCodeFixtures<?> fixture1, ColourCodeFixtures<?> fixture2) {
-        return Stream.of(
-                new TestCase<>(fixture1.black(), fixture2.black()),
-                new TestCase<>(fixture1.white(), fixture2.white()),
-                new TestCase<>(fixture1.grey(), fixture2.grey()),
+        List<TestCase<?,?>> testCases = new ArrayList<>();
 
-                new TestCase<>(fixture1.red(), fixture2.red()),
-                new TestCase<>(fixture1.green(), fixture2.green()),
-                new TestCase<>(fixture1.blue(), fixture2.blue()),
+        testCases.add(new TestCase<>(fixture1.black(), fixture2.black()));
+        testCases.add(new TestCase<>(fixture1.white(), fixture2.white()));
+        testCases.add(new TestCase<>(fixture1.grey(), fixture2.grey()));
 
-                new TestCase<>(fixture1.cyan(), fixture2.cyan()),
-                new TestCase<>(fixture1.magenta(), fixture2.magenta()),
-                new TestCase<>(fixture1.yellow(), fixture2.yellow())
-        ).map(testCase -> Arguments.of(testCase.name(), testCase))
-        .toList();
+        testCases.add(new TestCase<>(fixture1.red(), fixture2.red()));
+        testCases.add(new TestCase<>(fixture1.green(), fixture2.green()));
+        testCases.add(new TestCase<>(fixture1.blue(), fixture2.blue()));
+
+        testCases.add(new TestCase<>(fixture1.cyan(), fixture2.cyan()));
+        testCases.add(new TestCase<>(fixture1.magenta(), fixture2.magenta()));
+        testCases.add(new TestCase<>(fixture1.yellow(), fixture2.yellow()));
+
+        if(fixture1 instanceof HasOpacityFixtures<?> fixture1WithOpacity
+            && fixture2 instanceof HasOpacityFixtures<?> fixture2WithOpacity) {
+            testCases.add(new TestCase<>(fixture1WithOpacity.grey50pctOpacity(), fixture2WithOpacity.grey50pctOpacity()));
+        }
+
+        return testCases.stream().map(testCase -> Arguments.of(testCase.name(), testCase))
+                .toList();
     }
 
     //---- Tests ----

@@ -17,4 +17,10 @@ public interface ColourCodeFixtures<CODE extends ColourCode> {
     CODE magenta();
     CODE yellow();
 
+    interface HasOpacityFixtures<CODE extends ColourCode> {
+
+        CODE grey25pctOpacity();
+        CODE grey50pctOpacity();
+        CODE grey75pctOpacity();
+    }
 }

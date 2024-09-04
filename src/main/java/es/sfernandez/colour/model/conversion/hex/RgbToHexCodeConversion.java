@@ -29,7 +29,7 @@ public class RgbToHexCodeConversion
         String opacity = castIntToHex(rgb).substring(0, 2);
         String hexColour = castIntToHex(rgb).substring(2, 8);
 
-        if(opacity.equals("FF"))
+        if(opacity.equalsIgnoreCase("FF"))
             return new HexCode("#" + hexColour);
         else
             return new HexCode("#" + hexColour + opacity);

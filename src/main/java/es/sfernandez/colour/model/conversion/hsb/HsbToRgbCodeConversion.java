@@ -19,7 +19,7 @@ public class HsbToRgbCodeConversion
 
     @Override
     public RgbCode convert(HsbCode hsb) {
-        float r, g, b;
+        float r = 0, g = 0, b = 0;
 
         float chroma = hsb.brightness() * hsb.saturation();
         float segment = (hsb.hueDegrees() / 60f) % 6f;
@@ -50,10 +50,6 @@ public class HsbToRgbCodeConversion
             r = chroma;
             g = 0;
             b = fX;
-        } else {
-            r = 0;
-            g = 0;
-            b = 0;
         }
 
         r += fM;

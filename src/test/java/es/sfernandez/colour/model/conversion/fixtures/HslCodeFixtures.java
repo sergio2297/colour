@@ -2,7 +2,7 @@ package es.sfernandez.colour.model.conversion.fixtures;
 
 import es.sfernandez.colour.model.codifications.HslCode;
 
-public final class HslCodeFixtures implements ColourCodeFixtures<HslCode> {
+public final class HslCodeFixtures implements ColourCodeFixtures<HslCode>, ColourCodeFixtures.HasOpacityFixtures<HslCode> {
 
     @Override
     public Class<HslCode> colorCodeClass() {
@@ -52,5 +52,20 @@ public final class HslCodeFixtures implements ColourCodeFixtures<HslCode> {
     @Override
     public HslCode yellow() {
         return new HslCode(60, 100, 50);
+    }
+
+    @Override
+    public HslCode grey25pctOpacity() {
+        return new HslCode(0f, 0f, 0.5f, 0.25f);
+    }
+
+    @Override
+    public HslCode grey50pctOpacity() {
+        return new HslCode(0f, 0f, 0.5f, 0.5f);
+    }
+
+    @Override
+    public HslCode grey75pctOpacity() {
+        return new HslCode(0f, 0f, 0.5f, 0.75f);
     }
 }

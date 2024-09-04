@@ -2,7 +2,7 @@ package es.sfernandez.colour.model.conversion.fixtures;
 
 import es.sfernandez.colour.model.codifications.HexCode;
 
-public final class HexCodeFixtures implements ColourCodeFixtures<HexCode> {
+public final class HexCodeFixtures implements ColourCodeFixtures<HexCode>, ColourCodeFixtures.HasOpacityFixtures<HexCode> {
 
     @Override
     public Class<HexCode> colorCodeClass() {
@@ -52,5 +52,20 @@ public final class HexCodeFixtures implements ColourCodeFixtures<HexCode> {
     @Override
     public HexCode yellow() {
         return new HexCode("#FFFF00");
+    }
+
+    @Override
+    public HexCode grey25pctOpacity() {
+        return new HexCode("#80808040");
+    }
+
+    @Override
+    public HexCode grey50pctOpacity() {
+        return new HexCode("#80808080");
+    }
+
+    @Override
+    public HexCode grey75pctOpacity() {
+        return new HexCode("#808080BF");
     }
 }

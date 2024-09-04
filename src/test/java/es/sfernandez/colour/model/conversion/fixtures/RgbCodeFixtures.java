@@ -2,7 +2,7 @@ package es.sfernandez.colour.model.conversion.fixtures;
 
 import es.sfernandez.colour.model.codifications.RgbCode;
 
-public final class RgbCodeFixtures implements ColourCodeFixtures<RgbCode> {
+public final class RgbCodeFixtures implements ColourCodeFixtures<RgbCode>, ColourCodeFixtures.HasOpacityFixtures<RgbCode> {
 
     @Override
     public Class<RgbCode> colorCodeClass() {
@@ -52,5 +52,20 @@ public final class RgbCodeFixtures implements ColourCodeFixtures<RgbCode> {
     @Override
     public RgbCode yellow() {
         return new RgbCode(1.0f, 1.0f, 0.0f);
+    }
+
+    @Override
+    public RgbCode grey25pctOpacity() {
+        return new RgbCode(0.5f, 0.5f, 0.5f, 0.25f);
+    }
+
+    @Override
+    public RgbCode grey50pctOpacity() {
+        return new RgbCode(0.5f, 0.5f, 0.5f, 0.5f);
+    }
+
+    @Override
+    public RgbCode grey75pctOpacity() {
+        return new RgbCode(0.5f, 0.5f, 0.5f, 0.75f);
     }
 }

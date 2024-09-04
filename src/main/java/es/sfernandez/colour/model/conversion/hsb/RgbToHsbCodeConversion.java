@@ -35,18 +35,14 @@ public class RgbToHsbCodeConversion
                 h = 60 * (((rgb.red() - rgb.green()) / delta) + 4);
             }
 
-            if(max > 0) {
-                s = delta / max;
-            } else {
-                s = 0;
-            }
+            s = delta / max;
 
-            b = max;
         } else {
             h = 0;
             s = 0;
-            b = max;
         }
+
+        b = max;
 
         if(h < 0) {
             h = 360 + h;
