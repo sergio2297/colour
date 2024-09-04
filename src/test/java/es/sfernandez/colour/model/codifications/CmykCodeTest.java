@@ -161,7 +161,7 @@ class CmykCodeTest {
     }
 
     @Test
-    void createFromIncorrectCssCode_throwsIllegalArgumentExceptionTest() {
+    void createFromIncorrectRepresentationCode_throwsIllegalArgumentExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new CmykCode("C10M20Y30K40"));
         assertThrows(IllegalArgumentException.class, () -> new CmykCode("c10 m20 y30 k40"));
         assertThrows(IllegalArgumentException.class, () -> new CmykCode("C110 M20 Y30 K40"));
@@ -172,13 +172,41 @@ class CmykCodeTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"C63 M27 Y88 K100", "C63  M27      Y88   K100"})
-    void createFromCssCode_worksTest(String cssCode) {
-        CmykCode cmyk = new CmykCode(cssCode);
+    void createFromRepresentationCode_worksTest(String code) {
+        CmykCode cmyk = new CmykCode(code);
 
         assertThat(cmyk.cyanPercentage()).isEqualTo(63);
         assertThat(cmyk.magentaPercentage()).isEqualTo(27);
         assertThat(cmyk.yellowPercentage()).isEqualTo(88);
         assertThat(cmyk.blackPercentage()).isEqualTo(100);
+    }
+
+    @Test
+    void cmykCodes_areEqual_iffTheyHaveTheSameRedGreenBlueAlphaValuesTest() {
+        CmykCode cmykA = new CmykCode(0.88f, 0.44f, 0.22f, 0.11f);
+        CmykCode cmykB = new CmykCode(88, 44, 22, 11);
+        CmykCode cmykC = new CmykCode(87, 44, 22, 11);
+        CmykCode cmykD = new CmykCode(88, 43, 22, 11);
+        CmykCode cmykE = new CmykCode(88, 44, 21, 11);
+        CmykCode cmykF = new CmykCode(88, 44, 22, 10);
+
+        assertThat(cmykA.equals(cmykB)).isTrue();
+
+        assertThat(cmykA.equals(cmykC)).isFalse();
+        assertThat(cmykA.equals(cmykD)).isFalse();
+        assertThat(cmykA.equals(cmykE)).isFalse();
+        assertThat(cmykA.equals(cmykF)).isFalse();
+    }
+
+    @Test
+    void cmykCodes_haveSameHashCode_iffTheyAreEqualTest() {
+        CmykCode cmykA = new CmykCode(0.88f, 0.44f, 0.22f, 0.11f);
+        CmykCode cmykB = new CmykCode(88, 44, 22, 11);
+        CmykCode cmykC = new CmykCode(87, 44, 22, 11);
+
+        assertThat(cmykA.hashCode()).isEqualTo(cmykB.hashCode());
+
+        assertThat(cmykA.hashCode()).isNotEqualTo(cmykC.hashCode());
     }
 
 }

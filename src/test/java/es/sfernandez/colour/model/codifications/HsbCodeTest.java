@@ -90,37 +90,37 @@ class HsbCodeTest {
 
     @Test
     void createWithoutSpecifyOpacity_assignsFullOpacityTest() {
-        HsbCode hsl = new HsbCode(0, 0, 0);
+        HsbCode hsb = new HsbCode(0, 0, 0);
 
-        assertThat(hsl.isOpaque()).isTrue();
+        assertThat(hsb.isOpaque()).isTrue();
     }
 
     @Test
     void hueValue_createdFromDegrees_isCorrectlyNormalizedTest() {
-        HsbCode hsl = new HsbCode(90, 0, 0);
+        HsbCode hsb = new HsbCode(90, 0, 0);
 
-        assertThat(hsl.hue()).isCloseTo(0.25f, Offset.offset(0.005f));
+        assertThat(hsb.hue()).isCloseTo(0.25f, Offset.offset(0.005f));
     }
 
     @Test
     void saturationValue_createdFromPercentage_isCorrectlyNormalizedTest() {
-        HsbCode hsl = new HsbCode(0, 50, 0);
+        HsbCode hsb = new HsbCode(0, 50, 0);
 
-        assertThat(hsl.saturation()).isCloseTo(0.5f, Offset.offset(0.005f));
+        assertThat(hsb.saturation()).isCloseTo(0.5f, Offset.offset(0.005f));
     }
 
     @Test
     void brightnessValue_createdFromPercentage_isCorrectlyNormalizedTest() {
-        HsbCode hsl = new HsbCode(0, 0, 75);
+        HsbCode hsb = new HsbCode(0, 0, 75);
 
-        assertThat(hsl.brightness()).isCloseTo(0.75f, Offset.offset(0.005f));
+        assertThat(hsb.brightness()).isCloseTo(0.75f, Offset.offset(0.005f));
     }
 
     @Test
     void alphaValue_createdFromPercentage_isCorrectlyNormalizedTest() {
-        HsbCode hsl = new HsbCode(0, 0, 0, 85);
+        HsbCode hsb = new HsbCode(0, 0, 0, 85);
 
-        assertThat(hsl.alpha()).isEqualTo(0.85f);
+        assertThat(hsb.alpha()).isEqualTo(0.85f);
     }
     
     @Test
@@ -146,9 +146,37 @@ class HsbCodeTest {
 
     @Test
     void alphaValue_createdFromNormalizedValue_isCorrectlyNormalizedToPercentageTest() {
-        HsbCode hsl = new HsbCode(0, 0, 0, 0.33f);
+        HsbCode hsb = new HsbCode(0, 0, 0, 0.33f);
 
-        assertThat(hsl.alphaPercentage()).isEqualTo(33);
+        assertThat(hsb.alphaPercentage()).isEqualTo(33);
+    }
+
+    @Test
+    void hsbCodes_areEqual_iffTheyHaveTheSameRedGreenBlueAlphaValuesTest() {
+        HsbCode hsbA = new HsbCode(0.88f, 0.44f, 0.22f, 0.11f);
+        HsbCode hsbB = new HsbCode(317, 44, 22, 11);
+        HsbCode hsbC = new HsbCode(316, 44, 22, 11);
+        HsbCode hsbD = new HsbCode(317, 43, 22, 11);
+        HsbCode hsbE = new HsbCode(317, 44, 21, 11);
+        HsbCode hsbF = new HsbCode(317, 44, 22, 10);
+
+        assertThat(hsbA.equals(hsbB)).isTrue();
+
+        assertThat(hsbA.equals(hsbC)).isFalse();
+        assertThat(hsbA.equals(hsbD)).isFalse();
+        assertThat(hsbA.equals(hsbE)).isFalse();
+        assertThat(hsbA.equals(hsbF)).isFalse();
+    }
+
+    @Test
+    void hsbCodes_haveSameHashCode_iffTheyAreEqualTest() {
+        HsbCode hsbA = new HsbCode(0.88f, 0.44f, 0.22f, 0.11f);
+        HsbCode hsbB = new HsbCode(317, 44, 22, 11);
+        HsbCode hsbC = new HsbCode(316, 44, 22, 11);
+
+        assertThat(hsbA.hashCode()).isEqualTo(hsbB.hashCode());
+
+        assertThat(hsbA.hashCode()).isNotEqualTo(hsbC.hashCode());
     }
     
 }

@@ -126,9 +126,16 @@ class HexCodeTest {
     }
 
     @Test
+    void toString_returnsCssCodeTest() {
+        HexCode code = new HexCode("abcd");
+
+        assertThat(code.toCssCode()).isEqualTo(code.toString());
+    }
+
+    @Test
     void hexCodes_areEqual_iffTheyRepresentTheSameColour_noMatherIfOneOfThemIsSimplifiedTest() {
-        HexCode code1 = new HexCode("abcd");
-        HexCode code2 = new HexCode("#AABBCCDD");
+        HexCode code1 = new HexCode("abcf");
+        HexCode code2 = new HexCode("#AABBCCFF");
 
         assertThat(code1).isEqualTo(code2);
     }
@@ -147,6 +154,17 @@ class HexCodeTest {
         HexCode code2 = new HexCode("#ABCF05FF");
 
         assertThat(code1).isEqualTo(code2);
+    }
+
+    @Test
+    void hexCodes_haveSameHashCode_iffTheyAreEqualTest() {
+        HexCode code1 = new HexCode("aBcF05");
+        HexCode code2 = new HexCode("#ABCF05FF");
+        HexCode code3 = new HexCode("#AaCF05FF");
+
+        assertThat(code1.hashCode()).isEqualTo(code2.hashCode());
+
+        assertThat(code1.hashCode()).isNotEqualTo(code3.hashCode());
     }
 
 }

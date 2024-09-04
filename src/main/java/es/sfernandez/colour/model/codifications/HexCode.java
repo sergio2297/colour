@@ -113,9 +113,6 @@ public final class HexCode
     }
 
     private float getOpacityFromHexCode() {
-        if(!hasExplicitOpacity())
-            return 1.0f;
-
         int opacity = isSimplified()
                 ? castHexToInt(value.substring(3, 4).repeat(2))
                 : castHexToInt(value.substring(6, 8));

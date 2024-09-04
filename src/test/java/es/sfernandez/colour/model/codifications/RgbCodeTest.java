@@ -221,4 +221,32 @@ class RgbCodeTest {
         assertThat(rgb.alpha()).isEqualTo(0.18f);
     }
 
+    @Test
+    void rgbCodes_areEqual_iffTheyHaveTheSameRedGreenBlueAlphaValuesTest() {
+        RgbCode rgbA = new RgbCode(0.88f, 0.44f, 0.22f, 0.11f);
+        RgbCode rgbB = new RgbCode(224, 112, 56, 11);
+        RgbCode rgbC = new RgbCode(223, 112, 56, 11);
+        RgbCode rgbD = new RgbCode(224, 111, 56, 11);
+        RgbCode rgbE = new RgbCode(224, 112, 55, 11);
+        RgbCode rgbF = new RgbCode(224, 112, 55, 10);
+
+        assertThat(rgbA.equals(rgbB)).isTrue();
+
+        assertThat(rgbA.equals(rgbC)).isFalse();
+        assertThat(rgbA.equals(rgbD)).isFalse();
+        assertThat(rgbA.equals(rgbE)).isFalse();
+        assertThat(rgbA.equals(rgbF)).isFalse();
+    }
+
+    @Test
+    void rgbCodes_haveSameHashCode_iffTheyAreEqualTest() {
+        RgbCode rgbA = new RgbCode(0.88f, 0.44f, 0.22f, 0.11f);
+        RgbCode rgbB = new RgbCode(224, 112, 56, 11);
+        RgbCode rgbC = new RgbCode(223, 112, 56, 11);
+
+        assertThat(rgbA.hashCode()).isEqualTo(rgbB.hashCode());
+
+        assertThat(rgbA.hashCode()).isNotEqualTo(rgbC.hashCode());
+    }
+
 }

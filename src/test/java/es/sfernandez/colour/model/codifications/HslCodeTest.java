@@ -222,4 +222,32 @@ class HslCodeTest {
         assertThat(hsla.alpha()).isEqualTo(0.18f);
     }
 
+    @Test
+    void hslCodes_areEqual_iffTheyHaveTheSameRedGreenBlueAlphaValuesTest() {
+        HslCode hslA = new HslCode(0.88f, 0.44f, 0.22f, 0.11f);
+        HslCode hslB = new HslCode(317, 44, 22, 11);
+        HslCode hslC = new HslCode(316, 44, 22, 11);
+        HslCode hslD = new HslCode(317, 43, 22, 11);
+        HslCode hslE = new HslCode(317, 44, 21, 11);
+        HslCode hslF = new HslCode(317, 44, 22, 10);
+
+        assertThat(hslA.equals(hslB)).isTrue();
+
+        assertThat(hslA.equals(hslC)).isFalse();
+        assertThat(hslA.equals(hslD)).isFalse();
+        assertThat(hslA.equals(hslE)).isFalse();
+        assertThat(hslA.equals(hslF)).isFalse();
+    }
+
+    @Test
+    void hslCodes_haveSameHashCode_iffTheyAreEqualTest() {
+        HslCode hslA = new HslCode(0.88f, 0.44f, 0.22f, 0.11f);
+        HslCode hslB = new HslCode(317, 44, 22, 11);
+        HslCode hslC = new HslCode(316, 44, 22, 11);
+
+        assertThat(hslA.hashCode()).isEqualTo(hslB.hashCode());
+
+        assertThat(hslA.hashCode()).isNotEqualTo(hslC.hashCode());
+    }
+    
 }
