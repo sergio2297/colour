@@ -1,15 +1,15 @@
-package es.sfernandez.colour.model.conversion.hsb;
+package es.sfernandez.colour.model.conversion.hsv;
 
-import es.sfernandez.colour.model.codifications.HsbCode;
+import es.sfernandez.colour.model.codifications.HsvCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
 import es.sfernandez.colour.model.conversion.ColourCodeConversion;
 
-public class HsbToRgbCodeConversion
-        implements ColourCodeConversion<HsbCode, RgbCode> {
+public class HsvToRgbCodeConversion
+        implements ColourCodeConversion<HsvCode, RgbCode> {
 
     @Override
-    public Class<HsbCode> inColourCodeClass() {
-        return HsbCode.class;
+    public Class<HsvCode> inColourCodeClass() {
+        return HsvCode.class;
     }
 
     @Override
@@ -18,13 +18,13 @@ public class HsbToRgbCodeConversion
     }
 
     @Override
-    public RgbCode convert(HsbCode hsb) {
+    public RgbCode convert(HsvCode hsv) {
         float r = 0, g = 0, b = 0;
 
-        float chroma = hsb.brightness() * hsb.saturation();
-        float segment = (hsb.hueDegrees() / 60f) % 6f;
+        float chroma = hsv.brightness() * hsv.saturation();
+        float segment = (hsv.hueDegrees() / 60f) % 6f;
         float fX = chroma * (1f - Math.abs(segment % 2f - 1f));
-        float fM = hsb.brightness() - chroma;
+        float fM = hsv.brightness() - chroma;
 
         if(0 <= segment && segment < 1) {
             r = chroma;
@@ -56,7 +56,7 @@ public class HsbToRgbCodeConversion
         g += fM;
         b += fM;
 
-        return new RgbCode(r, g, b, hsb.alpha());
+        return new RgbCode(r, g, b, hsv.alpha());
     }
 
 }

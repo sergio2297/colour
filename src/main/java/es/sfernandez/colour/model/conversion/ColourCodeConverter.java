@@ -5,8 +5,8 @@ import es.sfernandez.colour.model.conversion.cmyk.CmykToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.cmyk.RgbToCmykCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.HexToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.hex.RgbToHexCodeConversion;
-import es.sfernandez.colour.model.conversion.hsb.HsbToRgbCodeConversion;
-import es.sfernandez.colour.model.conversion.hsb.RgbToHsbCodeConversion;
+import es.sfernandez.colour.model.conversion.hsv.HsvToRgbCodeConversion;
+import es.sfernandez.colour.model.conversion.hsv.RgbToHsvCodeConversion;
 import es.sfernandez.colour.model.conversion.hsl.HslToRgbCodeConversion;
 import es.sfernandez.colour.model.conversion.hsl.RgbToHslCodeConversion;
 
@@ -19,7 +19,7 @@ public class ColourCodeConverter {
         new HexToRgbCodeConversion(), new RgbToHexCodeConversion(), // HexCode
         new CmykToRgbCodeConversion(), new RgbToCmykCodeConversion(), // CmykCode
         new HslToRgbCodeConversion(), new RgbToHslCodeConversion(), // HslCode
-        new HsbToRgbCodeConversion(), new RgbToHsbCodeConversion() // HsbCode
+        new HsvToRgbCodeConversion(), new RgbToHsvCodeConversion() // HsvCode
     );
 
     //---- Attributes ----
@@ -80,7 +80,6 @@ public class ColourCodeConverter {
         return null;
     }
 
-    // TODO: Best way its to use a Graph and build a path of conversions. But at first, I'm gonna make it by brute force
     private <A extends ColourCode, B extends ColourCode> ColourCodeConversion<A, B> searchDeepConversion(
             Class<A> inClass, Class<B> outClass, Set<Class<ColourCode>> searchedInputs) {
 

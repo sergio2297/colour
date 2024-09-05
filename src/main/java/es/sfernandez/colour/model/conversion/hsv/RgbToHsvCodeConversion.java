@@ -1,13 +1,13 @@
-package es.sfernandez.colour.model.conversion.hsb;
+package es.sfernandez.colour.model.conversion.hsv;
 
-import es.sfernandez.colour.model.codifications.HsbCode;
+import es.sfernandez.colour.model.codifications.HsvCode;
 import es.sfernandez.colour.model.codifications.RgbCode;
 import es.sfernandez.colour.model.conversion.ColourCodeConversion;
 
 import static es.sfernandez.colour.model.utils.NumUtils.*;
 
-public class RgbToHsbCodeConversion
-        implements ColourCodeConversion<RgbCode, HsbCode> {
+public class RgbToHsvCodeConversion
+        implements ColourCodeConversion<RgbCode, HsvCode> {
 
     @Override
     public Class<RgbCode> inColourCodeClass() {
@@ -15,13 +15,13 @@ public class RgbToHsbCodeConversion
     }
 
     @Override
-    public Class<HsbCode> outColourCodeClass() {
-        return HsbCode.class;
+    public Class<HsvCode> outColourCodeClass() {
+        return HsvCode.class;
     }
 
     @Override
-    public HsbCode convert(RgbCode rgb) {
-        float h = 0, s, b;
+    public HsvCode convert(RgbCode rgb) {
+        float h = 0, s, v;
         float max = max(rgb.red(), rgb.green(), rgb.blue());
         float min = min(rgb.red(), rgb.green(), rgb.blue());
         float delta = max - min;
@@ -42,16 +42,16 @@ public class RgbToHsbCodeConversion
             s = 0;
         }
 
-        b = max;
+        v = max;
 
         if(h < 0) {
             h = 360 + h;
         }
 
         s = denormalize(0, 100, s);
-        b = denormalize(0, 100, b);
+        v = denormalize(0, 100, v);
         
-        return new HsbCode((int) h, (int) s, (int) b, rgb.alphaPercentage());
+        return new HsvCode((int) h, (int) s, (int) v, rgb.alphaPercentage());
     }
 
 }

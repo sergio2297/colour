@@ -5,22 +5,22 @@ import java.util.Objects;
 import static es.sfernandez.colour.model.utils.NumUtils.*;
 import static es.sfernandez.colour.model.utils.NumUtils.denormalize;
 
-public record HsbCode(float hue, float saturation, float brightness, float alpha)
+public record HsvCode(float hue, float saturation, float brightness, float alpha)
         implements ColourCode, HasOpacity {
 
     //---- Constructor ----
-    public HsbCode {
+    public HsvCode {
         assertIsNormalizedValue(hue, "Hue");
         assertIsNormalizedValue(saturation, "Saturation");
         assertIsNormalizedValue(brightness, "Brightness");
         assertIsNormalizedValue(alpha, "Alpha");
     }
 
-    public HsbCode(float hue, float saturation, float brightness) {
+    public HsvCode(float hue, float saturation, float brightness) {
         this(hue, saturation, brightness, 1.0f);
     }
 
-    public HsbCode(int hue, int saturation, int brightness, int alpha) {
+    public HsvCode(int hue, int saturation, int brightness, int alpha) {
         this(normalizeDegrees(hue),
                 normalizePercentage(saturation),
                 normalizePercentage(brightness),
@@ -28,7 +28,7 @@ public record HsbCode(float hue, float saturation, float brightness, float alpha
         );
     }
 
-    public HsbCode(int hue, int saturation, int brightness) {
+    public HsvCode(int hue, int saturation, int brightness) {
         this(hue, saturation, brightness, 100);
     }
 
@@ -41,12 +41,12 @@ public record HsbCode(float hue, float saturation, float brightness, float alpha
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof HsbCode hsbCode)) return false;
+        if (!(o instanceof HsvCode hsvCode)) return false;
 
-        return hueDegrees() == hsbCode.hueDegrees()
-                && saturationPercentage() == hsbCode.saturationPercentage()
-                && brightnessPercentage() == hsbCode.brightnessPercentage()
-                && alphaPercentage() == hsbCode.alphaPercentage();
+        return hueDegrees() == hsvCode.hueDegrees()
+                && saturationPercentage() == hsvCode.saturationPercentage()
+                && brightnessPercentage() == hsvCode.brightnessPercentage()
+                && alphaPercentage() == hsvCode.alphaPercentage();
     }
 
     @Override
