@@ -3,10 +3,11 @@ package es.sfernandez.colour.codifications;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RgbCodeTest {
 
@@ -181,23 +182,22 @@ class RgbCodeTest {
         assertThat(rgb.toCssCode()).isEqualTo("rgba(3, 9, 19, 0.33)");
     }
 
-    @Test
-    void createFromIncorrectCssCode_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgv(0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgb[0,0,0]"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgb(0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgb(-1,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgb(0,0.5,0)"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createFromNullOrEmptyCssCode_throwsIllegalArgumentExceptionTest(final String notValidRgbCode) {
+        assertThrows(IllegalArgumentException.class, () -> new RgbCode(notValidRgbCode));
     }
 
-    @Test
-    void createFromIncorrectCssCode_withTransparency_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgv(0,0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgba[0,0,0,0]"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgba(0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgb(0,0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgba(0,0,0,-0.5)"));
-        assertThrows(IllegalArgumentException.class, () -> new RgbCode("rgba(0,0,0,0,5)"));
+    @ParameterizedTest
+    @ValueSource(strings = {"rgv(0,0,0)", "rgb[0,0,0]", "rgb(0)", "rgb(-1,0,0)", "rgb(0,0.5,0)"})
+    void createFromIncorrectCssCode_throwsIllegalArgumentExceptionTest(final String notValidRgbCode) {
+        assertThrows(IllegalArgumentException.class, () -> new RgbCode(notValidRgbCode));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"rgv(0,0,0,0)", "rgba[0,0,0,0]", "rgba(0)", "rgb(0,0,0,0)", "rgba(0,0,0,-0.5)", "rgba(0,0,0,0,5)"})
+    void createFromIncorrectCssCode_withTransparency_throwsIllegalArgumentExceptionTest(final String notValidRgbCode) {
+        assertThrows(IllegalArgumentException.class, () -> new RgbCode(notValidRgbCode));
     }
 
     @ParameterizedTest

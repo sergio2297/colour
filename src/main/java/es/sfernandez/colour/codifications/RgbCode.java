@@ -75,6 +75,9 @@ public record RgbCode(float red, float green, float blue, float alpha)
     }
 
     private static Matcher matchCssCode(String cssCode) {
+        if(cssCode == null)
+            throw new IllegalArgumentException("Css code must not be null.");
+
         Matcher matcher = cssCodeWithTransparencyPattern.matcher(cssCode);
 
         if(!matcher.matches())

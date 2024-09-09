@@ -3,10 +3,11 @@ package es.sfernandez.colour.codifications;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HslCodeTest {
 
@@ -181,24 +182,22 @@ class HslCodeTest {
         assertThat(hsl.toCssCode()).isEqualTo("hsla(3, 9%, 19%, 0.95)");
     }
 
-    @Test
-    void createFromIncorrectCssCode_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hls(0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl[0,0,0]"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(-1,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0,0.5,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(90,0%,45)"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createFromNullOrEmptyCssCode_throwsIllegalArgumentExceptionTest(final String notValidHslCode) {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(notValidHslCode));
     }
 
-    @Test
-    void createFromIncorrectCssCode_withTransparency_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hlsa(0,0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla[0,0,0,0]"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsl(0,0,0,0)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0,0,0,-0.5)"));
-        assertThrows(IllegalArgumentException.class, () -> new HslCode("hsla(0,0,0,0,5)"));
+    @ParameterizedTest
+    @ValueSource(strings = {"hls(0,0,0)", "hsl[0,0,0]", "hsl(0)", "hsl(-1,0,0)", "hsl(0,0.5,0)", "hsl(90,0%,45)"})
+    void createFromIncorrectCssCode_throwsIllegalArgumentExceptionTest(final String notValidHslCode) {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(notValidHslCode));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"hlsa(0,0,0,0)", "hsla[0,0,0,0]", "hsla(0)", "hsl(0,0,0,0)", "hsla(0,0,0,-0.5)", "hsla(0,0,0,0,5)"})
+    void createFromIncorrectCssCode_withTransparency_throwsIllegalArgumentExceptionTest(final String notValidHslCode) {
+        assertThrows(IllegalArgumentException.class, () -> new HslCode(notValidHslCode));
     }
 
     @ParameterizedTest

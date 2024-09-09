@@ -51,6 +51,9 @@ public record CmykCode(float cyan, float magenta, float yellow, float black)
     }
 
     private static Matcher matchCode(String code) {
+        if(code == null)
+            throw new IllegalArgumentException("Code must not be null.");
+
         Matcher matcher = codePattern.matcher(code);
 
         if(!matcher.matches())

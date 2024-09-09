@@ -60,6 +60,9 @@ public record HslCode(float hue, float saturation, float lightness, float alpha)
     }
 
     private static int extractAlphaValueFromCssCode(String cssCode) {
+        if(cssCode == null)
+            throw new IllegalArgumentException("Css code must not be null.");
+
         Matcher matcher = cssCodeWithTransparencyPattern.matcher(cssCode);
 
         if(!matcher.matches())
@@ -69,6 +72,9 @@ public record HslCode(float hue, float saturation, float lightness, float alpha)
     }
 
     private static Matcher matchCssCode(String cssCode) {
+        if(cssCode == null)
+            throw new IllegalArgumentException("Css code must not be null.");
+
         Matcher matcher = cssCodeWithTransparencyPattern.matcher(cssCode);
 
         if(!matcher.matches())

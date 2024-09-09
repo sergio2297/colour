@@ -5,7 +5,6 @@ import es.sfernandez.colour.codifications.ColourCode;
 import es.sfernandez.colour.codifications.HexCode;
 import es.sfernandez.colour.codifications.RgbCode;
 import es.sfernandez.colour.conversion.fixtures.*;
-import es.sfernandez.colour.model.conversion.fixtures.*;
 import es.sfernandez.colour.conversion.fixtures.ColourCodeFixtures.HasOpacityFixtures;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

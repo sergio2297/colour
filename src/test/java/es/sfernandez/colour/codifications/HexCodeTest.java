@@ -3,6 +3,7 @@ package es.sfernandez.colour.codifications;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,13 +21,16 @@ class HexCodeTest {
         assertThrows(IllegalArgumentException.class, () -> new HexCode("   "));
     }
 
-    @Test
-    void createFromIncorrectCode_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new HexCode("#HAW345"));
-        assertThrows(IllegalArgumentException.class, () -> new HexCode("#12345"));
-        assertThrows(IllegalArgumentException.class, () -> new HexCode("2"));
-        assertThrows(IllegalArgumentException.class, () -> new HexCode("#12"));
-        assertThrows(IllegalArgumentException.class, () -> new HexCode("#FFAABBEE1"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createFromNullOrEmptyCssCode_throwsIllegalArgumentExceptionTest(final String notValidHexCode) {
+        assertThrows(IllegalArgumentException.class, () -> new HexCode(notValidHexCode));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"#HAW345", "#12345", "2", "#12", "#FFAABBEE1"})
+    void createFromIncorrectCode_throwsIllegalArgumentExceptionTest(final String notValidHexCode) {
+        assertThrows(IllegalArgumentException.class, () -> new HexCode(notValidHexCode));
     }
 
     @Test

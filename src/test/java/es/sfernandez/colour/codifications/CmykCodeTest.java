@@ -3,6 +3,7 @@ package es.sfernandez.colour.codifications;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -160,14 +161,16 @@ class CmykCodeTest {
         assertThat(cmyk.toCode()).isEqualTo("C3 M0 Y19 K100");
     }
 
-    @Test
-    void createFromIncorrectRepresentationCode_throwsIllegalArgumentExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("C10M20Y30K40"));
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("c10 m20 y30 k40"));
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("C110 M20 Y30 K40"));
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("C-10 M20 Y30 K40"));
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("C1.6 M20 Y30 K40"));
-        assertThrows(IllegalArgumentException.class, () -> new CmykCode("10C 20M 30Y 40K"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createFromNullOrEmptyRepresentation_throwsIllegalArgumentExceptionTest(final String notValidRepresentation) {
+        assertThrows(IllegalArgumentException.class, () -> new CmykCode(notValidRepresentation));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"C10M20Y30K40", "c10 m20 y30 k40", "C110 M20 Y30 K40", "C-10 M20 Y30 K40", "C1.6 M20 Y30 K40", "10C 20M 30Y 40K"})
+    void createFromIncorrectRepresentationCode_throwsIllegalArgumentExceptionTest(final String notValidRepresentation) {
+        assertThrows(IllegalArgumentException.class, () -> new CmykCode(notValidRepresentation));
     }
 
     @ParameterizedTest
