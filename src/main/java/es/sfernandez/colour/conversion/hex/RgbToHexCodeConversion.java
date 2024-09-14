@@ -6,6 +6,11 @@ import es.sfernandez.colour.conversion.ColourCodeConversion;
 
 import static es.sfernandez.colour.utils.NumUtils.denormalize;
 
+/**
+ * <p>{@link ColourCodeConversion} that converts a {@link RgbCode} into an {@link HexCode}.</p>
+ *
+ * @author Sergio Fernández
+ */
 public class RgbToHexCodeConversion
         implements ColourCodeConversion<RgbCode, HexCode> {
 

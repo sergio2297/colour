@@ -4,8 +4,13 @@ import es.sfernandez.colour.codifications.HslCode;
 import es.sfernandez.colour.codifications.RgbCode;
 import es.sfernandez.colour.conversion.ColourCodeConversion;
 
-import static es.sfernandez.colour.utils.NumUtils.*;
+import static es.sfernandez.colour.utils.NumUtils.denormalize;
 
+/**
+ * <p>{@link ColourCodeConversion} that converts an {@link HslCode} into a {@link RgbCode}.</p>
+ *
+ * @author Sergio Fernández
+ */
 public class HslToRgbCodeConversion
         implements ColourCodeConversion<HslCode, RgbCode> {
 

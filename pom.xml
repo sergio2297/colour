@@ -6,8 +6,20 @@
     <groupId>es.sfernandez</groupId>
     <artifactId>colour</artifactId>
     <version>1.0</version>
-    <name>Java colour</name>
+    <inceptionYear>2024</inceptionYear>
     <packaging>jar</packaging>
+
+    <name>Java colour</name>
+    <description>Java colour provides classes to easily handle colours in Java by being able to accept several colour
+        codifications and conversions between them.</description>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.target>21</maven.compiler.target>

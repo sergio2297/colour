@@ -4,6 +4,11 @@ import es.sfernandez.colour.codifications.CmykCode;
 import es.sfernandez.colour.codifications.RgbCode;
 import es.sfernandez.colour.conversion.ColourCodeConversion;
 
+/**
+ * <p>{@link ColourCodeConversion} that converts a {@link CmykCode} into a {@link RgbCode}.</p>
+ *
+ * @author Sergio Fernández
+ */
 public class CmykToRgbCodeConversion
         implements ColourCodeConversion<CmykCode, RgbCode> {
 

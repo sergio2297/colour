@@ -12,9 +12,27 @@ import es.sfernandez.colour.conversion.hsl.RgbToHslCodeConversion;
 
 import java.util.*;
 
+/**
+ * <p>A {@link ColourCodeConverter} performs the conversion from one {@link ColourCode} to another given ColourCode type.</p>
+ * <p>To achieve that, it uses a set of {@link ColourCodeConversion} that can be specified during construction, if not it will
+ * use {@link ColourCodeConverter#DEFAULT_AVAILABLE_CONVERSIONS}.</p>
+ * <p>The algorithm that it uses to convert one ColourCode A to another B search in the available conversions the one which
+ * can convert directly from A to B. If it can't be found, the converter will try to find another path to achieve the
+ * conversion to type B, using 1..n middle conversions.</p>
+ *
+ * @see ColourCodeConversion
+ *
+ * @author Sergio Fernández
+ */
 public class ColourCodeConverter {
 
     //---- Constants and Definitions ----
+    /**
+     * <p>Unmodifiable list with the default available {@link ColourCodeConversion}.</p>
+     * <p>It contains one conversion algorithm between every ColourCode defined in this library and
+     * the {@link es.sfernandez.colour.codifications.RgbCode} (one in each direction). Allowing the converter
+     * to convert any pair of two {@link ColourCode} in a maximum of two steps (A -> RGB -> B)</p>
+     */
     public static final List<ColourCodeConversion<?,?>> DEFAULT_AVAILABLE_CONVERSIONS = List.of(
         new HexToRgbCodeConversion(), new RgbToHexCodeConversion(), // HexCode
         new CmykToRgbCodeConversion(), new RgbToCmykCodeConversion(), // CmykCode
@@ -26,10 +44,20 @@ public class ColourCodeConverter {
     private final List<ColourCodeConversion<?,?>> availableConversions;
 
     //---- Constructor ----
+    /**
+     * <p>Creates a new {@link ColourCodeConverter} that uses the {@link ColourCodeConverter#DEFAULT_AVAILABLE_CONVERSIONS}.</p>
+     */
     public ColourCodeConverter() {
         this.availableConversions = DEFAULT_AVAILABLE_CONVERSIONS;
     }
 
+    /**
+     * <p>Creates a new {@link ColourCodeConverter} that will use the available conversions passed as argument.</p>
+     * @param availableConversions collection of available conversions
+     * @throws IllegalArgumentException if available conversions is null or is empty
+     * @implNote adding new conversions to availableConversions passed as argument (e.g.: if it's a List) after the
+     * creation of the converter, will not have any effect on the converter's available conversions.
+     */
     public ColourCodeConverter(final Iterable<ColourCodeConversion<?,?>> availableConversions) {
         if(availableConversions == null || !availableConversions.iterator().hasNext())
             throw new IllegalArgumentException("Error. You must provide a not empty iterable of available conversions");
@@ -39,10 +67,29 @@ public class ColourCodeConverter {
     }
 
     //---- Methods ----
+    /**
+     * @return an {@link Iterator} with all available conversions
+     */
     public Iterator<ColourCodeConversion<?,?>> availableConversions() {
         return availableConversions.iterator();
     }
 
+    /**
+     * <p>Converts colourCode to targetColourCodeClass by searching in the available conversions the one which
+     * can perform the conversion directly. If it can't be found, the converter will try to find another path to achieve the
+     * conversion to targetColourCodeClass, using 1..n middle conversions.</p>
+     * @param colourCode {@link ColourCode} to convert
+     * @param targetColourCodeClass {@link ColourCode} type target of the conversion
+     * @return <ul>
+     *     <li>The corresponding codification of colourCode in targetColourCodeClass.</li>
+     *     <li><code>null</code> if colourCode is null.</li>
+     *     <li><code>colourCode</code> if targetColourCodeClass is equal to colourCode.class.</li>
+     * </ul>
+     * @param <A> ColourCode type to convert
+     * @param <B> ColourCode type target of the conversion
+     * @throws IllegalArgumentException if targetColourCodeClass is null or if it's not possible to find any path to convert
+     * colourCode to targetColourCodeClass
+     */
     public <A extends ColourCode, B extends ColourCode> B convert(final A colourCode, final Class<B> targetColourCodeClass) {
         if(colourCode == null)
             return null;

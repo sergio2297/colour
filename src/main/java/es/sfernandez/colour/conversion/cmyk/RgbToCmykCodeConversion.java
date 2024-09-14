@@ -6,6 +6,11 @@ import es.sfernandez.colour.conversion.ColourCodeConversion;
 
 import static es.sfernandez.colour.utils.NumUtils.max;
 
+/**
+ * <p>{@link ColourCodeConversion} that converts a {@link RgbCode} into a {@link CmykCode}.</p>
+ *
+ * @author Sergio Fernández
+ */
 public class RgbToCmykCodeConversion
         implements ColourCodeConversion<RgbCode, CmykCode> {
 

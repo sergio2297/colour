@@ -6,6 +6,14 @@ import es.sfernandez.colour.conversion.ColourCodeConverter;
 
 import java.util.Objects;
 
+/**
+ * <p>A Colour is the representation of a colour as a concept and it can be created from any {@link ColourCode}.
+ * This means that two Colours are equal iff they represent the same colour, no matter what codification they use.</p>
+ *
+ * @see ColourCode
+ *
+ * @author Sergio Fernández
+ */
 public class Colour {
 
     //---- Attributes ----
@@ -13,10 +21,22 @@ public class Colour {
     private final ColourCodeConverter converter;
 
     //---- Constructor ----
+    /**
+     * <p>Creates a new Colour.</p>
+     * @param code ColourCode
+     */
     public Colour(ColourCode code) {
         this(code, new ColourCodeConverter());
     }
 
+    /**
+     * <p>Creates a new Colour with the given converter.</p>
+     * <p>Converter is necessary to perform "castings" between different ColourCodes. If it's not specified it will use
+     * the default {@link ColourCodeConverter}.</p>
+     * @param code ColourCode
+     * @param converter {@link ColourCodeConverter} that will be used to cast the colour to different codifications.
+     * @throws IllegalArgumentException if code or converter are null
+     */
     public Colour(ColourCode code, final ColourCodeConverter converter) {
         if(code == null)
             throw new IllegalArgumentException("Error. The " + ColourCode.class.getSimpleName() + " is required to " +
@@ -33,6 +53,14 @@ public class Colour {
     }
 
     //---- Methods ----
+    /**
+     * <p>Returns the representation of this colour in the given {@link ColourCode}.</p>
+     * <p>To achieve that, it uses the {@link ColourCodeConverter} passed during construction. So, if the converter can't
+     * perform the conversion an Exception will be thrown.</p>
+     * @param colourCode target ColourCode class
+     * @return this Colour with the given codification
+     * @param <T> ColourCode to convert
+     */
     public final <T extends ColourCode> T as(Class<T> colourCode) {
         return converter.convert(code, colourCode);
     }

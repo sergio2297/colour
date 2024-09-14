@@ -6,6 +6,11 @@ import es.sfernandez.colour.conversion.ColourCodeConversion;
 
 import static es.sfernandez.colour.utils.NumUtils.*;
 
+/**
+ * <p>{@link ColourCodeConversion} that converts a {@link RgbCode} into an {@link HsvCode}.</p>
+ *
+ * @author Sergio Fernández
+ */
 public class RgbToHsvCodeConversion
         implements ColourCodeConversion<RgbCode, HsvCode> {
 
