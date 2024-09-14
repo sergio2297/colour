@@ -102,8 +102,7 @@ public class ColourCodeConverter {
 
         ColourCodeConversion<A, B> conversion = (ColourCodeConversion<A, B>) searchConversion(colourCode.getClass(), targetColourCodeClass);
         if(conversion == null)
-            throw new IllegalArgumentException("Error. There isn't any available conversion that converts "
-                    + colourCode.getClass().getSimpleName() + " to " + targetColourCodeClass.getSimpleName());
+            throw new ColourCodeConversionUnreachableException(colourCode.getClass(), targetColourCodeClass);
 
         return conversion.convert(colourCode);
     }

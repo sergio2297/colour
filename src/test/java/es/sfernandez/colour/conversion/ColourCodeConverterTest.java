@@ -147,21 +147,21 @@ class ColourCodeConverterTest {
     }
 
     @Test
-    void convertColourCodeOfNotAvailableSource_toAvailableTargetColourCodeClass_throwsIllegalArgumentExceptionTest() {
+    void convertColourCodeOfNotAvailableSource_toAvailableTargetColourCodeClass_throwsColourCodeConversionUnreachableExceptionTest() {
         ColourCodeConverter converter = new ColourCodeConverter(
                 List.of(ColourCodeConversion.identity(HexCode.class))
         );
 
-        assertThrows(IllegalArgumentException.class, () -> converter.convert(new RgbCode(0,0,0), HexCode.class));
+        assertThrows(ColourCodeConversionUnreachableException.class, () -> converter.convert(new RgbCode(0,0,0), HexCode.class));
     }
 
     @Test
-    void convertColourCode_toNotAvailableTargetColourCodeClass_throwsIllegalArgumentExceptionTest() {
+    void convertColourCode_toNotAvailableTargetColourCodeClass_throwsColourCodeConversionUnreachableExceptionTest() {
         ColourCodeConverter converter = new ColourCodeConverter(
                 List.of(ColourCodeConversion.identity(HexCode.class))
         );
 
-        assertThrows(IllegalArgumentException.class, () -> converter.convert(new HexCode("#000000"), RgbCode.class));
+        assertThrows(ColourCodeConversionUnreachableException.class, () -> converter.convert(new HexCode("#000000"), RgbCode.class));
     }
 
     @Test
